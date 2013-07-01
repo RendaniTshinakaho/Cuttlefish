@@ -1,0 +1,3 @@
+namespace CuttlefishExample.Domain.Accounts
+{
+}

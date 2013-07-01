@@ -1,0 +1,216 @@
+﻿<#@ template language="C#" hostspecific="True"#>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Reflection" #>
+<#@ import namespace="Aitako.DSL" #>
+<#@ import namespace="Aitako.DSL.Components" #>
+
+
+using System;
+using Cuttlefish.Common;
+using Cuttlefish;
+using System.Web.Mvc;
+
+namespace <#= Make.BaseNamespace #>
+{
+	public class DomainController : Controller
+	{
+	<# foreach(var aggregate in Aggregate.All){ #>
+		<# foreach(Command command in aggregate.Commands){ #>
+ 
+		 public JsonResult <#= command.Name#>(<#= ParameterList(command.Parameters)#>)
+			{
+				try {
+					var command = new <#= command.Name#>(<#= ParameterListWithoutTypes(command.Parameters)#>);
+					CommandRouter.ExecuteCommand(command);
+					return this.JsonResponse(true);
+				} catch(Exception ex){
+					return this.JsonResponse(false, ex);
+					throw;
+				}
+			}
+		<# }#>
+	<# }#>
+	}
+}
+<# SaveOutput("..\\Controllers",  "DomainController.cs"); #>
+
+
+<# foreach(var aggregate in Aggregate.All){ #>
+
+<# Header(aggregate.Name); #>
+
+<# foreach(Event @event in aggregate.Events){ #>
+ 
+public class <#= @event.Name #> : IEvent
+{
+	private readonly int _Version;
+    public int Version { get { return _Version; } }
+
+	<# foreach(Parameter parameter in @event.Parameters){ #>
+	public <#= ResolveType(parameter.Type) #> <#= parameter.Name #> { get; private set; }
+	<# }#>
+
+    public <#= @event.Name #>()
+	{
+		_Version = 1;
+	}
+   
+    public <#= @event.Name #>(<#= ParameterList(@event.Parameters)#>) : this()
+    {
+		<# foreach(Parameter parameter in @event.Parameters){ #>
+		<#= parameter.Name #> = <#= parameter.Name.ToLower() #>;
+		<# }#>
+    }
+}
+
+<# }#>
+
+<# Footer(); #>
+
+<# SaveOutput(aggregate.Name,  "Events.cs"); #>
+
+<# Header(aggregate.Name); #>
+
+<# foreach(Command command in aggregate.Commands){ #>
+ 
+public class <#= command.Name #> : ICommand
+{
+    private readonly int _Version;
+    public int Version { get { return _Version; } }
+
+	<# foreach(Parameter parameter in command.Parameters){ #>
+	public <#= ResolveType(parameter.Type) #> <#= parameter.Name #> { get; private set; }
+	<# }#>
+
+    public <#= command.Name #>()
+	{
+		_Version = 1;
+	}
+  
+    public <#= command.Name #>(<#= ParameterList(command.Parameters)#>) : this()
+    {
+		<# foreach(Parameter parameter in command.Parameters){ #>
+		<#= parameter.Name #> = <#= parameter.Name.ToLower() #>;
+		<# }#>
+    }
+}
+
+<# }#>
+
+<# Footer(); #>
+
+<# SaveOutput(aggregate.Name,  "Commands.cs"); #>
+
+<# Header(aggregate.Name); #>
+
+<#
+	var aggregateName = aggregate.Name;
+#>
+
+<# if(string.IsNullOrEmpty(aggregate.Parent))
+{
+#>
+public class <#= aggregateName #> : AggregateBase
+<#
+}
+else
+{
+#>
+public class <#= aggregateName #> : <#= aggregate.Parent #>Aggregate
+<#
+}
+#>
+{
+
+
+public <#= aggregateName #>() : base(new List<IEvent>()) { }
+public <#= aggregateName #>(IEnumerable<IEvent> events) : base(events){}
+
+<# foreach(Field field in aggregate.Fields){ #>
+	public <#= ResolveType(field.Type) #> <#= field.Name #> { get; protected set; }
+<# }#>
+
+<# foreach(Command command in aggregate.Commands){ #>
+public void On(<#= command.Name #> cmd)
+{
+    throw new NotImplementedException();
+}
+<#}#>
+
+<# foreach(Event @event in aggregate.Events){ #>
+public void When(<#=  @event.Name #> evt)
+{
+    throw new NotImplementedException();
+}
+<#}#>
+
+}
+
+<# Footer(); #>
+
+<# SaveOutput(aggregate.Name,  aggregate.Name+ ".cs"); #>
+
+<# } #>
+
+
+
+<#+ public string ResolveType(Type type){	
+	return type.Name;
+} #>
+
+<#+ public string ParameterList(List<Parameter> parameters){	
+	var parameterList = string.Empty;
+
+	foreach( var parameter in parameters){
+		parameterList += string.Format("{0} {1}",ResolveType(parameter.Type), parameter.Name.ToLower());
+		if ( parameter != parameters.Last()){
+			parameterList+=", ";
+        }
+    }
+
+	return parameterList;
+} #>
+
+<#+ public string ParameterListWithoutTypes(List<Parameter> parameters){	
+	var parameterList = string.Empty;
+
+	foreach( var parameter in parameters){
+		parameterList += string.Format("{0}", parameter.Name.ToLower());
+		if ( parameter != parameters.Last()){
+			parameterList+=", ";
+        }
+    }
+
+	return parameterList;
+} #>
+
+<#+ public void Header(string aggregate){	#>
+
+using System;
+using System.Collections.Generic;
+using Cuttlefish;
+using Cuttlefish.Common;
+
+namespace <#= Make.BaseNamespace #> {
+<#+} #>
+
+<#+ public void Footer(){	#>
+}
+<#+} #>
+
+<#+
+  void SaveOutput(string subFolder, string outputFileName)
+  {
+      string templateDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) +"\\"+ Make.BoundedContextName + "\\" + subFolder;
+	  Directory.CreateDirectory(templateDirectory);
+
+      string outputFilePath = Path.Combine(templateDirectory, outputFileName);
+      File.WriteAllText(outputFilePath, this.GenerationEnvironment.ToString()); 
+
+      this.GenerationEnvironment.Remove(0, this.GenerationEnvironment.Length);
+  }
+#>

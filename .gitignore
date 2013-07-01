@@ -78,3 +78,5 @@ _ReSharper.*
 *.vsp
 *.psess
 
+packages
+.nuget

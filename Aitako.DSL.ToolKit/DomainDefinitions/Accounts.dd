@@ -1,0 +1,28 @@
+﻿Make.WithNamespace("CuttlefishExample.Domain");
+
+Make.InTheBoundedContextOf("Accounts");
+Service.ServiceNamed("Accounts")
+        .ThatCan("RegisterClient")
+            .WithParameter<string>("Name")
+            .WithParameter<string>("PhoneNumber")
+            .WithParameter<string>("EmailAddres")
+        .And()
+        .ThatRaises("ClientRegistered")
+            .WithParameter<string>("Name")
+            .WithParameter<string>("PhoneNumber")
+            .WithParameter<string>("EmailAddres")
+        .Done();
+
+
+Aggregate.AggregateNamed("Account")
+            .ThatCan("Suspend")
+                .WithParameter<string>("Reason")
+            .And()
+            .ThatCan("Unsuspend")
+                .WithParameter<string>("Reason")
+            .And()
+            .ThatRaises("AccountSuspended")
+                .WithParameter<string>("Reason")
+            .And()
+            .ThatRaises("AccountReinstated")
+            .Done();

@@ -1,0 +1,32 @@
+﻿Make.WithNamespace("CuttlefishExample.Domain");
+
+Make.InTheBoundedContextOf("Catalogue");
+Service.ServiceNamed("Products")
+        .ThatCan("StockNewProduct")
+            .WithParameter<string>("Name")
+            .WithParameter<string>("Description")
+            .WithParameter<int>("Price")
+        .And()
+        .ThatRaises("NewProductInCatalogue")
+            .WithParameter<string>("Name")
+            .WithParameter<string>("Description")
+            .WithParameter<int>("Price")
+        .Done();
+
+Aggregate.AggregateNamed("Product")
+            .WithField<Guid>("Name")
+            .WithField<Guid>("Description")
+            .WithField<Guid>("Price")
+            .ThatCan("Discontinue")
+                .WithParameter<string>("Reason")
+            .And()
+            .ThatRaises("ProductDiscontinued")
+                .WithParameter<string>("Reason")
+			.And()
+			.ThatCan("AdjustPrice")
+				.WithParameter<int>("NewPrice")
+			.And()
+			.ThatRaises("PriceAdjusted")
+				.WithParameter<int>("NewPrice")
+				.WithParameter<int>("OldPrice")
+            .Done();
