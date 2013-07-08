@@ -1,15 +1,14 @@
 ﻿using System;
 using Cuttlefish.Common;
-using MassTransit;
 using StructureMap;
 
 namespace Cuttlefish
 {
-    public class Core : IDisposable
+    public class Core
     {
         static Core()
         {
-            _Instance = new Core();
+            Instance = new Core();
         }
 
         private Core()
@@ -17,16 +16,10 @@ namespace Cuttlefish
             Container = new Container(container => container.Build());
         }
 
-        private static Core _Instance { get; set; }
 
-        public static Core Instance
-        {
-            get { return _Instance; }
-        }
+        public static Core Instance { get; private set; }
 
-        private IContainer Container { get; set; }
-        private IServiceBus ProjectionBus { get; set; }
-
+        internal IContainer Container { get; set; }
         internal string NamespaceRoot { get; private set; }
         internal bool UseCaching { get; private set; }
 
@@ -63,21 +56,6 @@ namespace Cuttlefish
             }
         }
 
-        public void Dispose()
-        {
-            if (Container != null)
-            {
-                Container.Dispose();
-                Container = null;
-            }
-
-            if (ProjectionBus != null)
-            {
-                ProjectionBus.Dispose();
-                ProjectionBus = null;
-            }
-        }
-
         public IContainer GetContainer()
         {
             return Container;
@@ -89,7 +67,14 @@ namespace Cuttlefish
         /// <returns></returns>
         public static Core Configure()
         {
-            return _Instance;
+            return Instance;
+        }
+
+        public Core ConfigureContainer(Action<ConfigurationExpression> config)
+        {
+            Instance.GetContainer().Configure(config);
+
+            return Instance;
         }
 
         /// <summary>
@@ -99,8 +84,8 @@ namespace Cuttlefish
         /// <returns></returns>
         public Core WithDomainNamespaceRoot(string namespaceRoot)
         {
-            _Instance.NamespaceRoot = namespaceRoot;
-            return _Instance;
+            Instance.NamespaceRoot = namespaceRoot;
+            return Instance;
         }
 
         public Core Done()
@@ -112,16 +97,15 @@ namespace Cuttlefish
 
             if (EventStore == null)
             {
-                throw new Exception(
-                    "No event store has been defined. Please make sure that you define one before calling 'Done'");
+                throw new EventStoreNotDefinedException();
             }
 
-            return _Instance;
+            return Instance;
         }
 
         internal static void Reset()
         {
-            _Instance = new Core();
+            Instance = new Core();
         }
 
         public static T ResolveInstance<T>()

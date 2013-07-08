@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using Cuttlefish.AggregatePublishers.MassTransit;
 using Cuttlefish.Common;
 using Cuttlefish.Domain.Catalogue.ProductAggregate;
 using Cuttlefish.Domain.Catalogue.ProductsService;
 using Cuttlefish.EventStorage.NEventStore;
+using EventStore;
+using EventStore.Serialization;
+using MassTransit;
 using NUnit.Framework;
 
 namespace Cuttlefish.Domain.Tests
@@ -11,19 +16,31 @@ namespace Cuttlefish.Domain.Tests
     [TestFixture]
     public class Product : AggregateBase
     {
+        private ProductsService _ProductsService;
+        private Guid _Id;
+        private StockNewProduct _Cmd;
+
         [SetUp]
         public void Setup()
         {
+
+
             Core.Reset();
             Core.Configure()
                 .WithDomainNamespaceRoot("Cuttlefish.Domain")
-                .UseInMemoryEventStore()
+                                .UseNEventStore(Wireup.Init().UsingMongoPersistence("eventstore", new DocumentObjectSerializer()).Build())
+
+                 .UseMassTransitAggregateUpdatePublisher(ServiceBusFactory.New(sbc =>
+                 {
+                     sbc.UseRabbitMq();
+                     sbc.ReceiveFrom("rabbitmq://192.168.1.103/AggregateUpdatePublisherTests");
+                 }))
                 .Done();
 
             _ProductsService = new ProductsService();
             _Cmd = new StockNewProduct("Widget 123", "Some or other description", 100);
             _Id = _Cmd.AggregateIdentity;
-            _ProductsService.On(_Cmd);
+            CommandRouter.ExecuteCommand(_Cmd);
         }
 
         public Product(IEnumerable<IEvent> events)
@@ -36,15 +53,14 @@ namespace Cuttlefish.Domain.Tests
         {
         }
 
-        private ProductsService _ProductsService;
-        private Guid _Id;
-        private StockNewProduct _Cmd;
-
 
         [Test]
         public void AdjustPrice()
         {
-            CommandRouter.ExecuteCommand(new AdjustPrice(_Id, 50));
+            for (int i = 0; i < 1000; i++)
+            {
+                CommandRouter.ExecuteCommand(new AdjustPrice(_Id, 50));
+            }
             var aggregate = AggregateBuilder.Get<ProductAggregate>(_Id);
             Assert.That(aggregate.Price, Is.EqualTo(50));
         }
@@ -62,8 +78,9 @@ namespace Cuttlefish.Domain.Tests
         }
 
         [Test]
-        public void StockNewProduct()
+        public void Stock()
         {
+
             var aggregate = AggregateBuilder.Get<ProductAggregate>(_Id);
 
             Assert.That(aggregate.Name, Is.EqualTo(_Cmd.Name));

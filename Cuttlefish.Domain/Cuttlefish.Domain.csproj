@@ -35,6 +35,9 @@
     <Reference Include="EventStore">
       <HintPath>..\packages\EventStore.3.2.0.28\lib\net40\EventStore.dll</HintPath>
     </Reference>
+    <Reference Include="EventStore.Persistence.MongoPersistence">
+      <HintPath>..\packages\EventStore.Persistence.MongoPersistence.3.2.0.28\lib\net40\EventStore.Persistence.MongoPersistence.dll</HintPath>
+    </Reference>
     <Reference Include="Magnum, Version=2.1.0.0, Culture=neutral, PublicKeyToken=b800c4cfcdeea87b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Magnum.2.1.0\lib\NET40\Magnum.dll</HintPath>
@@ -50,8 +53,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MassTransit.RabbitMQ.2.7.4\lib\net40\MassTransit.Transports.RabbitMq.dll</HintPath>
     </Reference>
+    <Reference Include="MongoDB.Bson, Version=1.8.1.20, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Users\Johann\Dropbox\Aitako\Internal Projects\Overview\packages\Mongodb.1.7.1.4791\lib\net40\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=1.8.1.20, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Mongodb.1.7.1.4791\lib\net40\MongoDB.Driver.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\Aitako.DSL\bin\Debug\nunit.framework.dll</HintPath>
+      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="RabbitMQ.Client, Version=3.0.4.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -115,7 +126,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

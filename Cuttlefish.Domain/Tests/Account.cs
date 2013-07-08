@@ -18,11 +18,6 @@ namespace Cuttlefish.Domain.Tests
             Core.Configure()
                 .WithDomainNamespaceRoot("Cuttlefish.Domain")
                 .UseInMemoryEventStore()
-                .UseMassTransitAggregateUpdatePublisher(ServiceBusFactory.New(sbc =>
-                    {
-                        sbc.UseRabbitMq();
-                        sbc.ReceiveFrom("rabbitmq://127.0.0.1/AggregateUpdatePublisherTests");
-                    }))
                 .Done();
 
             _AccountsService = new AccountsService();
