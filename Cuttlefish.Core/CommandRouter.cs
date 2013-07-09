@@ -76,7 +76,7 @@ namespace Cuttlefish
 
                 if (handlerType != null)
                 {
-                    if (handlerType.GetInterfaces().Any(i => i.Name == typeof (IService).Name))
+                    if (handlerType.GetInterfaces().Any(i => i.Name == typeof(IService).Name))
                     {
                         object service = handlerType.CreateInstance();
                         service.CallMethod(CommandHandlerMethodName, command);
@@ -86,26 +86,17 @@ namespace Cuttlefish
                         AggregateBase aggregateBase = null;
                         if (Core.Instance.Cache != null && Core.Instance.UseCaching)
                         {
-                            aggregateBase =
-                                (AggregateBase) Core.Instance.Cache.Fetch(command.AggregateIdentity, handlerType);
-                            if (aggregateBase == null)
-                            {
-                                aggregateBase =
-                                    (AggregateBase)
-                                    handlerType.CreateInstance(
-                                        Core.Instance.EventStore.GetEvents(command.AggregateIdentity));
+                            aggregateBase = FetchFromCacheOrBuildFromEvents(command.AggregateIdentity, handlerType);
+                        }
 
+                        if (aggregateBase == null)
+                        {
+                            aggregateBase = AggregateBuilder.Get(command.AggregateIdentity, handlerType);
+                            if (Core.Instance.Cache != null)
+                            {
                                 Core.Instance.Cache.Cache(aggregateBase);
                             }
                         }
-                        else
-                        {
-                            aggregateBase =
-                                (AggregateBase)
-                                handlerType.CreateInstance(
-                                    Core.Instance.EventStore.GetEvents(command.AggregateIdentity));
-                        }
-
 
                         aggregateBase.CallMethod(CommandHandlerMethodName, command);
                     }
@@ -115,6 +106,12 @@ namespace Cuttlefish
             {
                 throw new NoHandlerFoundException(command.GetType());
             }
+        }
+
+        private AggregateBase FetchFromCacheOrBuildFromEvents(Guid aggregateIdentity, Type handlerType)
+        {
+            var aggregateBase = (AggregateBase)Core.Instance.Cache.Fetch(aggregateIdentity, handlerType);
+            return aggregateBase;
         }
     }
 }

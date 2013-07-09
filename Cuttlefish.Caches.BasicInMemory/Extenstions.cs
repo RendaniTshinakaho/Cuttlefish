@@ -11,7 +11,7 @@ namespace Cuttlefish.Caches.BasicInMemory
             {
                 throw new CacheAlreadyConfiguredException();
             }
-            core.GetContainer().Configure(expression => expression.For<ICache>().Use<InMemoryDictionaryCache>());
+            core.GetContainer().Configure(expression => expression.For<ICache>().Singleton().Use<InMemoryDictionaryCache>());
 
             return core;
         }
