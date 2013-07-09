@@ -97,10 +97,6 @@
       <Project>{a05c964c-e3d8-4314-8add-911244e4acda}</Project>
       <Name>Cuttlefish.Storage.MongoDB</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Cuttlefish.Domain\Cuttlefish.Domain.csproj">
-      <Project>{94d4be25-efd7-4f5e-b492-b5a35590d0c4}</Project>
-      <Name>Cuttlefish.Domain</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

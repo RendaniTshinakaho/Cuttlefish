@@ -1,3 +1,0 @@
-namespace CuttlefishExample.Domain.Accounts
-{
-}
