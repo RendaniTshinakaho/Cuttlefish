@@ -32,7 +32,7 @@ namespace Cuttlefish.EventStorage.NEventStore
         }
 
         [Test]
-        [ExpectedException(typeof(EventStoreAlreadyConfiguredException))]
+        [ExpectedException(typeof (EventStoreAlreadyConfiguredException))]
         public void EventStoreSetupThrowsExceptionWhenAlreadyConfigured()
         {
             Core.Reset();

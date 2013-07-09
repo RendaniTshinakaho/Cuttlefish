@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Cuttlefish.Common;
 using Cuttlefish.Common.Exceptions;
 using Cuttlefish.EventStorage.NEventStore;
 using NUnit.Framework;
-using Cuttlefish;
 
 namespace Cuttlefish.Tests.Core
 {
@@ -17,9 +15,19 @@ namespace Cuttlefish.Tests.Core
         {
             Cuttlefish.Core.Reset();
             Cuttlefish.Core.Configure()
-                .WithDomainNamespaceRoot("Cuttlefish.Tests")
-                .UseInMemoryEventStore()
-                .Done();
+                      .WithDomainNamespaceRoot("Cuttlefish.Tests")
+                      .UseInMemoryEventStore()
+                      .Done();
+        }
+
+        [Test]
+        public void AggregateNameIsCorrect()
+        {
+            Guid id = Guid.NewGuid();
+            var cmd = new AddOne(id);
+            CommandRouter.ExecuteCommand(cmd);
+            var builtAggregate = AggregateBuilder.Get<TestAggregate>(id);
+            Assert.That(builtAggregate.TypeName, Is.EqualTo(builtAggregate.GetType().FullName));
         }
 
         [Test]
@@ -36,17 +44,7 @@ namespace Cuttlefish.Tests.Core
         }
 
         [Test]
-        public void AggregateNameIsCorrect()
-        {
-            Guid id = Guid.NewGuid();
-            var cmd = new AddOne(id);
-            CommandRouter.ExecuteCommand(cmd);
-            var builtAggregate = AggregateBuilder.Get<TestAggregate>(id);
-            Assert.That(builtAggregate.TypeName, Is.EqualTo(builtAggregate.GetType().FullName));
-        }
-
-        [Test]
-        [ExpectedException(typeof(NoHandlerFoundException))]
+        [ExpectedException(typeof (NoHandlerFoundException))]
         public void CommandNotFoundThrowsException()
         {
             CommandRouter.ExecuteCommand(new MyUnhandledCommand());
@@ -84,7 +82,6 @@ namespace Cuttlefish.Tests.Core
         public TestAggregate(IEnumerable<IEvent> events)
             : base(events)
         {
-
         }
 
         public void On(AddOne cmd)
@@ -101,6 +98,7 @@ namespace Cuttlefish.Tests.Core
         {
             Count++;
         }
+
         public void When(OneSubtracted evt)
         {
             Count--;
@@ -109,45 +107,45 @@ namespace Cuttlefish.Tests.Core
 
     public class AddOne : ICommand
     {
-        public Guid AggregateIdentity { get; private set; }
-        public int Version { get; private set; }
-
         public AddOne(Guid aggregateIdentity)
         {
             AggregateIdentity = aggregateIdentity;
         }
+
+        public Guid AggregateIdentity { get; private set; }
+        public int Version { get; private set; }
     }
 
     public class MinusOne : ICommand
     {
-        public Guid AggregateIdentity { get; private set; }
-        public int Version { get; private set; }
-
         public MinusOne(Guid aggregateIdentity)
         {
             AggregateIdentity = aggregateIdentity;
         }
+
+        public Guid AggregateIdentity { get; private set; }
+        public int Version { get; private set; }
     }
 
     public class OneAdded : IEvent
     {
-        public Guid AggregateIdentity { get; private set; }
-        public int Version { get; private set; }
-
         public OneAdded(Guid aggregateIdentity)
         {
             AggregateIdentity = aggregateIdentity;
         }
+
+        public Guid AggregateIdentity { get; private set; }
+        public int Version { get; private set; }
     }
 
     public class OneSubtracted : IEvent
     {
-        public Guid AggregateIdentity { get; private set; }
-        public int Version { get; private set; }
-
         public OneSubtracted(Guid aggregateIdentity)
         {
             AggregateIdentity = aggregateIdentity;
         }
+
+        public Guid AggregateIdentity { get; private set; }
+        public int Version { get; private set; }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using Cuttlefish.Common;
-using Cuttlefish.Common.Exceptions;
 using MassTransit;
 
 namespace Cuttlefish.AggregatePublishers.MassTransit

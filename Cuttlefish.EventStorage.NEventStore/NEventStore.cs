@@ -19,7 +19,7 @@ namespace Cuttlefish.EventStorage.NEventStore
         {
             using (IEventStream stream = _store.OpenStream(evt.AggregateIdentity, 0, int.MaxValue))
             {
-                stream.Add(new EventMessage { Body = evt });
+                stream.Add(new EventMessage {Body = evt});
                 stream.CommitChanges(Guid.NewGuid());
             }
         }
