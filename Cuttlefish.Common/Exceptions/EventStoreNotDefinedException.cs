@@ -2,6 +2,7 @@
 
 namespace Cuttlefish.Common.Exceptions
 {
+    [Serializable]
     public class EventStoreNotDefinedException : Exception
     {
         public EventStoreNotDefinedException()

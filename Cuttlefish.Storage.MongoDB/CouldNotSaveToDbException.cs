@@ -2,6 +2,7 @@ using System;
 
 namespace Cuttlefish.Storage.MongoDB
 {
+    [Serializable]
     public class CouldNotSaveToDbException : Exception
     {
         public CouldNotSaveToDbException(string errorMessage)

@@ -2,6 +2,7 @@
 
 namespace Cuttlefish.Common.Exceptions
 {
+    [Serializable]
     public class NoHandlerFoundException : Exception
     {
         public NoHandlerFoundException(Type commandType)
