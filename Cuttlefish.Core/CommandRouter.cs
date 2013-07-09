@@ -76,7 +76,7 @@ namespace Cuttlefish
 
                 if (handlerType != null)
                 {
-                    if (handlerType.GetInterfaces().Any(i => i.Name == typeof(IService).Name))
+                    if (handlerType.GetInterfaces().Any(i => i.Name == typeof (IService).Name))
                     {
                         object service = handlerType.CreateInstance();
                         service.CallMethod(CommandHandlerMethodName, command);
