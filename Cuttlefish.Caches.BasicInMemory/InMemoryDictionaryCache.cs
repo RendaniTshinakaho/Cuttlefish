@@ -7,11 +7,11 @@ namespace Cuttlefish.Caches.BasicInMemory
     /// <summary>
     ///     NOT MADE FOR PRODUCTION. FOR TESTING PURPOSES ONLY
     /// </summary>
-    public class BasicInMemoryCache : ICache
+    public class InMemoryDictionaryCache : ICache
     {
         private static readonly Dictionary<string, IAggregate> _Cache;
 
-        static BasicInMemoryCache()
+        static InMemoryDictionaryCache()
         {
             _Cache = new Dictionary<string, IAggregate>();
         }

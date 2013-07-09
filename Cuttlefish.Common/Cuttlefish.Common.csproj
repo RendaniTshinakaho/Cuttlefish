@@ -43,7 +43,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\CacheAlreadyConfiguredException.cs" />
-    <Compile Include="Exceptions\CoreNotInitialisedException.cs" />
     <Compile Include="DefaultProjectionAttribute.cs" />
     <Compile Include="Exceptions\EventStoreAlreadyConfiguredException.cs" />
     <Compile Include="Exceptions\EventStoreNotDefinedException.cs" />

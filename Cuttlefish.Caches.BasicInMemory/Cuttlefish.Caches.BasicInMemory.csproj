@@ -47,9 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InMemoryCacheExtensionTests.cs" />
     <Compile Include="Extenstions.cs" />
     <Compile Include="InMemoryCacheTests.cs" />
-    <Compile Include="BasicInMemoryCache.cs" />
+    <Compile Include="InMemoryDictionaryCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

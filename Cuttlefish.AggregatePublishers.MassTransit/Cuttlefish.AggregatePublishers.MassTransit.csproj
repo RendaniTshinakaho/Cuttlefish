@@ -64,10 +64,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AggregatePublisherAlreadyDefinedException.cs" />
     <Compile Include="Extenstions.cs" />
     <Compile Include="MassTransitAggregateUpdatePublisher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cuttlefish.Common\Cuttlefish.Common.csproj">

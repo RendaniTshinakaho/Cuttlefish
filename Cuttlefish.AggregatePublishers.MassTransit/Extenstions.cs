@@ -16,7 +16,7 @@ namespace Cuttlefish.AggregatePublishers.MassTransit
 
             if (core.GetContainer().Model.HasImplementationsFor<IAggregateUpdatePublisher>())
             {
-                throw new EventStoreAlreadyConfiguredException();
+                throw new AggregatePublisherAlreadyDefinedException();
             }
 
             core.GetContainer()

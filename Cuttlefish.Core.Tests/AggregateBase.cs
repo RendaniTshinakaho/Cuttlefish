@@ -7,7 +7,7 @@ using Cuttlefish.EventStorage.NEventStore;
 using NUnit.Framework;
 using Cuttlefish;
 
-namespace Cuttlefish.Tests
+namespace Cuttlefish.Tests.Core
 {
     [TestFixture]
     public class AggegateBaseTests

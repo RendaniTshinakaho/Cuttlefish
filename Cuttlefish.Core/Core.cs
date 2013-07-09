@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Cuttlefish.Common;
 using StructureMap;
 
@@ -88,6 +89,12 @@ namespace Cuttlefish
             return Instance;
         }
 
+        internal Core UsingNullEventStore()
+        {
+            Container.Configure(expression => expression.For<IEventStore>().Use<DummyEventstore>());
+            return Instance;
+        }
+
         public Core Done()
         {
             if (GetContainer().Model.HasImplementationsFor<ICache>())
@@ -117,6 +124,18 @@ namespace Cuttlefish
             catch (StructureMapException ex)
             {
                 throw new Exception("Failed to instantiate instance through DI container.", ex);
+            }
+        }
+
+        internal class DummyEventstore : IEventStore
+        {
+            public void AddEvent<T>(T evt) where T : class, IEvent
+            {
+            }
+
+            public IEnumerable<IEvent> GetEvents(Guid streamId)
+            {
+                return new List<IEvent>();
             }
         }
     }

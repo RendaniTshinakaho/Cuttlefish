@@ -35,6 +35,9 @@
     <Reference Include="EventStore">
       <HintPath>..\packages\EventStore.3.2.0.28\lib\net40\EventStore.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
     </Reference>
@@ -49,6 +52,7 @@
   <ItemGroup>
     <Compile Include="NEventStore.cs" />
     <Compile Include="Extenstions.cs" />
+    <Compile Include="NEventstoreSetupTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

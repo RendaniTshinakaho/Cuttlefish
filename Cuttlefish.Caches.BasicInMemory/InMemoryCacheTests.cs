@@ -10,10 +10,10 @@ namespace Cuttlefish.Caches.BasicInMemory
         [SetUp]
         public void Setup()
         {
-            Cache = new BasicInMemoryCache();
+            _dictionaryCache = new InMemoryDictionaryCache();
         }
 
-        private BasicInMemoryCache Cache;
+        private InMemoryDictionaryCache _dictionaryCache;
 
         internal class TestItem1 : IAggregate
         {
@@ -43,18 +43,18 @@ namespace Cuttlefish.Caches.BasicInMemory
         public void CanAddMultipleTypes()
         {
             var testItem1 = new TestItem1();
-            Cache.Cache(testItem1);
+            _dictionaryCache.Cache(testItem1);
 
             var testItem2 = new TestItem2();
-            Cache.Cache(testItem2);
+            _dictionaryCache.Cache(testItem2);
 
-            var fetchedItem = Cache.Fetch<TestItem1>(testItem1.AggregateIdentity);
+            var fetchedItem = _dictionaryCache.Fetch<TestItem1>(testItem1.AggregateIdentity);
             Assert.That(fetchedItem, Is.Not.Null);
 
-            var expectNullItem = Cache.Fetch<TestItem2>(testItem1.AggregateIdentity);
+            var expectNullItem = _dictionaryCache.Fetch<TestItem2>(testItem1.AggregateIdentity);
             Assert.That(expectNullItem, Is.Null);
 
-            var secondItem = Cache.Fetch<TestItem2>(testItem2.AggregateIdentity);
+            var secondItem = _dictionaryCache.Fetch<TestItem2>(testItem2.AggregateIdentity);
             Assert.That(secondItem, Is.Not.Null);
         }
 
@@ -62,9 +62,9 @@ namespace Cuttlefish.Caches.BasicInMemory
         public void CanAddToCache()
         {
             var testItem = new TestItem1();
-            Cache.Cache(testItem);
+            _dictionaryCache.Cache(testItem);
 
-            var fetchedItem = Cache.Fetch<TestItem1>(testItem.AggregateIdentity);
+            var fetchedItem = _dictionaryCache.Fetch<TestItem1>(testItem.AggregateIdentity);
             Assert.That(fetchedItem, Is.Not.Null);
             Assert.That(fetchedItem.AggregateIdentity, Is.EqualTo(testItem.AggregateIdentity));
             Assert.That(fetchedItem.TypeName, Is.EqualTo(testItem.TypeName));

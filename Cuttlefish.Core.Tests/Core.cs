@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Cuttlefish.Common;
 using NUnit.Framework;
 using Cuttlefish.EventStorage.NEventStore;
+using StructureMap;
 
 namespace Cuttlefish.Tests.Core
 {
@@ -27,9 +28,20 @@ namespace Cuttlefish.Tests.Core
         }
 
         [Test]
+        public void CanSetupNullEventStoreForTesting()
+        {
+            Cuttlefish.Core.Reset();
+            Cuttlefish.Core.Configure()
+                .UsingNullEventStore()
+                .WithDomainNamespaceRoot(string.Empty)
+                .Done();
+            Assert.That(Cuttlefish.Core.Instance.EventStore, Is.InstanceOf<Cuttlefish.Core.DummyEventstore>());
+        }
+
+        [Test]
         public void CanSetNamespaceRootThroughFluidAPI()
         {
-            var namespaceString = "Test";
+            const string namespaceString = "Test";
             Cuttlefish.Core.Reset();
             Cuttlefish.Core.Configure()
                 .UseInMemoryEventStore()
@@ -46,10 +58,7 @@ namespace Cuttlefish.Tests.Core
             Cuttlefish.Core.Instance
                 .WithDomainNamespaceRoot("Cuttlefish.Tests.Core")
                 .UseInMemoryEventStore()
-                .ConfigureContainer(expression =>
-                {
-                    expression.For<ITest>().Use<Test>();
-                })
+                .ConfigureContainer(expression => expression.For<ITest>().Use<Test>())
                 .Done();
 
             var instance = Cuttlefish.Core.ResolveInstance<ITest>();
@@ -64,10 +73,7 @@ namespace Cuttlefish.Tests.Core
             Cuttlefish.Core.Instance
                 .WithDomainNamespaceRoot("Cuttlefish.Tests.Core")
                 .UseInMemoryEventStore()
-                .ConfigureContainer(expression =>
-                {
-                    expression.For<ICache>().Use<Test>();
-                })
+                .ConfigureContainer(expression => expression.For<ICache>().Use<Test>())
                 .Done();
 
             Assert.That(Cuttlefish.Core.Instance.UseCaching, Is.True);
@@ -80,14 +86,25 @@ namespace Cuttlefish.Tests.Core
             Cuttlefish.Core.Instance
                 .WithDomainNamespaceRoot("Cuttlefish.Tests.Core")
                 .UseInMemoryEventStore()
-                .ConfigureContainer(expression =>
-                {
-                    expression.For<ICache>().Use<Test>();
-                })
+                .ConfigureContainer(expression => expression.For<ICache>().Use<Test>())
                 .Done();
 
             Assert.That(Cuttlefish.Core.Instance.Cache, Is.Not.Null);
             Assert.That(Cuttlefish.Core.Instance.Cache, Is.InstanceOf<ICache>());
+        }
+
+        [Test]
+        [ExpectedException(typeof(Exception))]
+        public void ResolveInstanceOfUnknownTypeFailsWithException()
+        {
+            Cuttlefish.Core.Reset();
+            Cuttlefish.Core.Instance
+                .WithDomainNamespaceRoot("Cuttlefish.Tests.Core")
+                .UseInMemoryEventStore()
+                .ConfigureContainer(expression => expression.For<ICache>().Use<Test>())
+                .Done();
+
+            Cuttlefish.Core.ResolveInstance<string>();
         }
 
         [Test]
@@ -97,10 +114,7 @@ namespace Cuttlefish.Tests.Core
             Cuttlefish.Core.Instance
                 .WithDomainNamespaceRoot("Cuttlefish.Tests.Core")
                 .UseInMemoryEventStore()
-                .ConfigureContainer(expression =>
-                {
-                    expression.For<IAggregateUpdatePublisher>().Use<Test>();
-                })
+                .ConfigureContainer(expression => expression.For<IAggregateUpdatePublisher>().Use<Test>())
                 .Done();
 
             Assert.That(Cuttlefish.Core.Instance.AggregateUpdatePublisher, Is.Not.Null);

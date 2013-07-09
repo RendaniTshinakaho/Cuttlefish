@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("Cuttlefish.Domain")]
 [assembly: InternalsVisibleTo("Cuttlefish.EventStorage.NEventStore")]
 [assembly: InternalsVisibleTo("Cuttlefish.Tests.Core")]
+[assembly: InternalsVisibleTo("Cuttlefish.Caches.BasicInMemory")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
