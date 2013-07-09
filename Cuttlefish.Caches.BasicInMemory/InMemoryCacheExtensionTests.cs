@@ -1,6 +1,4 @@
-﻿using System;
-using Cuttlefish.Common;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace Cuttlefish.Caches.BasicInMemory
 {

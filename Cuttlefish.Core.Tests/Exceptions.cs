@@ -8,7 +8,6 @@ namespace Cuttlefish.Tests.Core
         [Test]
         public void CanInstantiateCoreNotInitialisedException()
         {
-            
         }
     }
 }
