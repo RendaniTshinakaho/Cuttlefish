@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cuttlefish.Common;
+using Cuttlefish.Common.Exceptions;
 using NUnit.Framework;
 using Cuttlefish.EventStorage.NEventStore;
 using StructureMap;

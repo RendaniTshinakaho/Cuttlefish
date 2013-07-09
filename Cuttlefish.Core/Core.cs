@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cuttlefish.Common;
+using Cuttlefish.Common.Exceptions;
 using StructureMap;
 
 namespace Cuttlefish

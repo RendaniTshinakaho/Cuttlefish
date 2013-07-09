@@ -1,11 +1,9 @@
-﻿using System;
-using Cuttlefish.Common;
+﻿using Cuttlefish.Common;
 using Cuttlefish.Common.Exceptions;
-using Cuttlefish.EventStorage.NEventStore;
 using EventStore;
 using NUnit.Framework;
 
-namespace Cuttlefish.Tests
+namespace Cuttlefish.EventStorage.NEventStore
 {
     [TestFixture]
     public class NEventstoreSetupTests
