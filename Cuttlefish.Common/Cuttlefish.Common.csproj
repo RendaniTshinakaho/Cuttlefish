@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\AggregateNotFoundException.cs" />
     <Compile Include="Exceptions\CacheAlreadyConfiguredException.cs" />
     <Compile Include="Exceptions\EventStoreAlreadyConfiguredException.cs" />
     <Compile Include="Exceptions\EventStoreNotDefinedException.cs" />

@@ -86,7 +86,7 @@ namespace Cuttlefish
                         AggregateBase aggregateBase = null;
                         if (Core.Instance.Cache != null && Core.Instance.UseCaching)
                         {
-                            aggregateBase = FetchFromCacheOrBuildFromEvents(command.AggregateIdentity, handlerType);
+                            aggregateBase = Core.Instance.Cache.Fetch<AggregateBase>(command.AggregateIdentity);
                         }
 
                         if (aggregateBase == null)
@@ -98,7 +98,7 @@ namespace Cuttlefish
                             }
                         }
 
-                        aggregateBase.CallMethod(CommandHandlerMethodName, command);
+                        CallCommandOnAggregate(command, aggregateBase);
                     }
                 }
             }
@@ -108,10 +108,16 @@ namespace Cuttlefish
             }
         }
 
-        private AggregateBase FetchFromCacheOrBuildFromEvents(Guid aggregateIdentity, Type handlerType)
+        private void CallCommandOnAggregate(ICommand command, AggregateBase aggregateBase)
         {
-            var aggregateBase = (AggregateBase)Core.Instance.Cache.Fetch(aggregateIdentity, handlerType);
-            return aggregateBase;
+            if (aggregateBase != null)
+            {
+                aggregateBase.CallMethod(CommandHandlerMethodName, command);
+            }
+            else
+            {
+                throw new AggregateNotFoundException();
+            }
         }
     }
 }
