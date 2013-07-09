@@ -16,11 +16,21 @@ namespace Cuttlefish
         protected AggregateBase(IEnumerable<IEvent> events)
         {
             _aggregateLoading = true;
-            foreach (IEvent @event in events)
+            try
             {
-                InvokeEvent(this, @event);
+                foreach (IEvent @event in events)
+                {
+                    InvokeEvent(this, @event);
+                }
             }
-            _aggregateLoading = false;
+            catch (EventExecutionException ex)
+            {
+                throw new AggregateRehydrationException(this, ex);
+            }
+            finally
+            {
+                _aggregateLoading = false;
+            }
         }
 
         [BsonId]
@@ -33,8 +43,15 @@ namespace Cuttlefish
 
         public void FireEvent(IEvent @event)
         {
-            InvokeEvent(this, @event);
-            Core.Instance.EventStore.AddEvent(@event);
+            try
+            {
+                InvokeEvent(this, @event);
+                Core.Instance.EventStore.AddEvent(@event);
+            }
+            catch
+            {
+                throw new EventExecutionException(this, @event);
+            }
         }
 
         protected void InvokeEvent(AggregateBase instance, IEvent @event)
@@ -47,7 +64,7 @@ namespace Cuttlefish
 
             if (eventHandlerMethod != null)
             {
-                eventHandlerMethod.Invoke(instance, new object[] {@event});
+                eventHandlerMethod.Invoke(instance, new object[] { @event });
 
                 if (!_aggregateLoading)
                 {
