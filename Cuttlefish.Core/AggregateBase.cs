@@ -11,7 +11,7 @@ namespace Cuttlefish
     public abstract class AggregateBase : IAggregate
     {
         private readonly bool _aggregateLoading;
-        private string _TypeName;
+        private string _typeName;
 
         protected AggregateBase(IEnumerable<IEvent> events)
         {
@@ -38,7 +38,7 @@ namespace Cuttlefish
 
         public string TypeName
         {
-            get { return _TypeName ?? (_TypeName = GetType().FullName); }
+            get { return _typeName ?? (_typeName = GetType().FullName); }
         }
 
         public void FireEvent(IEvent @event)
@@ -57,6 +57,7 @@ namespace Cuttlefish
         protected void InvokeEvent(AggregateBase instance, IEvent @event)
         {
             Type eventType = @event.GetType();
+            // could probably do with some caching here. should be pretty easy to do.
             MethodInfo eventHandlerMethod =
                 instance.GetType()
                         .Methods()
@@ -80,10 +81,9 @@ namespace Cuttlefish
         /// <param name="instance"></param>
         private static void UpdateAggregateCache(AggregateBase instance)
         {
-            ICache cache = Core.Instance.Cache;
-            if (Core.Instance.UseCaching && cache != null)
+            if (Core.Instance.UseCaching && Core.Instance.Cache != null)
             {
-                cache.Cache(instance);
+                Core.Instance.Cache.Cache(instance);
             }
         }
 
