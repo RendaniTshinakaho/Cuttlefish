@@ -18,7 +18,6 @@ namespace Cuttlefish
             Container = new Container(container => container.Build());
         }
 
-
         public static Core Instance { get; private set; }
 
         internal IContainer Container { get; set; }
@@ -75,7 +74,6 @@ namespace Cuttlefish
         public Core ConfigureContainer(Action<ConfigurationExpression> config)
         {
             Instance.GetContainer().Configure(config);
-
             return Instance;
         }
 
@@ -124,7 +122,7 @@ namespace Cuttlefish
             }
             catch (StructureMapException ex)
             {
-                throw new Exception("Failed to instantiate instance through DI container.", ex);
+                throw new CannotResolveInstanceException("Failed to instantiate instance through DI container.", ex);
             }
         }
 

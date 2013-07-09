@@ -45,6 +45,7 @@
     <Compile Include="Exceptions\AggregateNotFoundException.cs" />
     <Compile Include="Exceptions\AggregateRehydrationException.cs" />
     <Compile Include="Exceptions\CacheAlreadyConfiguredException.cs" />
+    <Compile Include="Exceptions\CannotResolveInstanceException.cs" />
     <Compile Include="Exceptions\EventExecutionException.cs" />
     <Compile Include="Exceptions\EventStoreAlreadyConfiguredException.cs" />
     <Compile Include="Exceptions\EventStoreNotDefinedException.cs" />

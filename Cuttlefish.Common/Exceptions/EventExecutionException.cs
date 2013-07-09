@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cuttlefish
+namespace Cuttlefish.Common.Exceptions
 {
     public class EventExecutionException : Exception
     {

@@ -1,7 +1,6 @@
 ﻿using System;
-using Cuttlefish.Common;
 
-namespace Cuttlefish
+namespace Cuttlefish.Common.Exceptions
 {
     public class AggregateRehydrationException : Exception
     {

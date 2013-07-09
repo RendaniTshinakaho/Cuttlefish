@@ -104,7 +104,7 @@ namespace Cuttlefish.Tests.Core
         }
 
         [Test]
-        [ExpectedException(typeof (Exception))]
+        [ExpectedException(typeof(CannotResolveInstanceException))]
         public void ResolveInstanceOfUnknownTypeFailsWithException()
         {
             Cuttlefish.Core.Reset();

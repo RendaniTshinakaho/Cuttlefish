@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Cuttlefish.Common;
+using Cuttlefish.Common.Exceptions;
 using Fasterflect;
 using MongoDB.Bson.Serialization.Attributes;
 
