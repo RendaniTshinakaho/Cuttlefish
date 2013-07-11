@@ -38,11 +38,12 @@ Core.Configure()
 ```
 
 This will wire up all the components required by the framework.  Out of the box, you get:
-+ integration with RabbitMQ through MassTransit
-+ integration with NEventStore using any of the supported persistence adapters. (Mongo, Raven, MS/MySQL)
-+ a very basic low-volume in-memory aggregate cache (for testing and small projects)
-+ a mongo aggregate cache which saves the latest version of each aggregate to disc using MongoDB
-+ dependency injection using StructureMap
+
+* integration with RabbitMQ through MassTransit
+* integration with NEventStore using any of the supported persistence adapters. (Mongo, Raven, MS/MySQL)
+* a very basic low-volume in-memory aggregate cache (for testing and small projects)
+* a mongo aggregate cache which saves the latest version of each aggregate to disc using MongoDB
+* dependency injection using StructureMap
 
 ###The framework consists of the following core components:
 #####Core
