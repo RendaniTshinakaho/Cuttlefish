@@ -10,7 +10,7 @@ Events are persisted through the excellent [NEventStore](http://neventstore.org)
 #####Quick Setup
 Getting the framework up and running is super easy. Assuming that we are using RabbitMQ with a MongoDB event store backing, we would set up the framework as follows:
 
-```C#
+````C#
 // Starts up the configuration interface
 Core.Configure()
  
@@ -36,7 +36,7 @@ Core.Configure()
 
 	// Wires everything up for us.
     .Done();
-```
+````
 
 This will wire up all the components required by the framework.  Out of the box, you get:
 
