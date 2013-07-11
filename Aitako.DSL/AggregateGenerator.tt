@@ -44,19 +44,18 @@ namespace <#= Make.BaseNamespace #>
 <# Header(aggregate.Name); #>
 
 <# foreach(Event @event in aggregate.Events){ #>
- 
 public class <#= @event.Name #> : IEvent
 {
-	private readonly int _Version;
-    public int Version { get { return _Version; } }
+	private readonly int _version;
+    public int Version { get { return _version; } }
 
 	<# foreach(Parameter parameter in @event.Parameters){ #>
 	public <#= ResolveType(parameter.Type) #> <#= parameter.Name #> { get; private set; }
 	<# }#>
 
-    public <#= @event.Name #>()
+    private <#= @event.Name #>()
 	{
-		_Version = 1;
+		_version = 1;
 	}
    
     public <#= @event.Name #>(<#= ParameterList(@event.Parameters)#>) : this()
@@ -66,7 +65,6 @@ public class <#= @event.Name #> : IEvent
 		<# }#>
     }
 }
-
 <# }#>
 
 <# Footer(); #>
@@ -79,16 +77,16 @@ public class <#= @event.Name #> : IEvent
  
 public class <#= command.Name #> : ICommand
 {
-    private readonly int _Version;
-    public int Version { get { return _Version; } }
+    private readonly int _version;
+    public int Version { get { return _version; } }
 
 	<# foreach(Parameter parameter in command.Parameters){ #>
 	public <#= ResolveType(parameter.Type) #> <#= parameter.Name #> { get; private set; }
 	<# }#>
 
-    public <#= command.Name #>()
+    private <#= command.Name #>()
 	{
-		_Version = 1;
+		_version = 1;
 	}
   
     public <#= command.Name #>(<#= ParameterList(command.Parameters)#>) : this()

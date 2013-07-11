@@ -1,7 +1,8 @@
-﻿Make.WithNamespace("CuttlefishExample.Domain");
+﻿Make.WithNamespace("Cuttlefish.ExampleApp.Domain");
 
-Make.InTheBoundedContextOf("Accounts");
-Service.ServiceNamed("Accounts")
+Make.InTheBoundedContextOf("AddressBook");
+
+Service.ServiceNamed("AddressBook")
         .ThatCan("RegisterClient")
             .WithParameter<string>("Name")
             .WithParameter<string>("PhoneNumber")
@@ -14,7 +15,7 @@ Service.ServiceNamed("Accounts")
         .Done();
 
 
-Aggregate.AggregateNamed("Account")
+Aggregate.AggregateNamed("Entry")
             .ThatCan("Suspend")
                 .WithParameter<string>("Reason")
             .And()

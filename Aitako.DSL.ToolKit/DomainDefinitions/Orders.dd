@@ -1,4 +1,4 @@
-﻿Make.WithNamespace("CuttlefishExample.Domain");
+﻿Make.WithNamespace("Cuttlefish.ExampleApp.Domain");
 Make.InTheBoundedContextOf("Orders");
 
 Service.ServiceNamed("Orders")
