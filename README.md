@@ -5,7 +5,7 @@ A friendly and easy to use [CQRS](http://abdullin.com/cqrs) framework with a flu
 The framework uses [MassTransit](http://masstransit-project.com/) as a message bus wrapper, which means that you could use either [RabbitMQ](http://rabbitmq.com) or [MSMQ](http://en.wikipedia.org/wiki/Microsoft_Message_Queuing) as an event queue. 
 Events are persisted through the excellent [NEventStore](http://neventstore.org) library which has support for a wide range of databases including [MongoDB](http://www.mongodb.org), [RavenDB](http://ravendb.net) and various flavours of SQL.
 
-####NOT READY FOR USE IN PRODUCTION YET. I'm looking at having the code and documentation stable enough (with the current feature set) for small projects by August 2013. 
+####NOT READY FOR USE IN PRODUCTION YET. A lot of documentation still needs to be written and some refactoring and tweaking still needs to take place before I'd start using this on smaller projects.
 
 #####Quick Setup
 Getting the framework up and running is super easy. Assuming that we are using RabbitMQ with a MongoDB event store backing, we would set up the framework as follows:
