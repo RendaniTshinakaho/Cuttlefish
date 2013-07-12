@@ -37,6 +37,17 @@ namespace Cuttlefish.ExampleApp.Domain
             _productId = newProductCommand.AggregateIdentity;
         }
 
+
+
+        [Test]
+        [ExpectedException(typeof (InvalidBarcodeException))]
+        public void WarehouseThrowsExceptionWhenInvalidBarcodeIsSelectedForNewProduct()
+        {
+            var newProductCommand = new StartStockingProduct(Guid.NewGuid(), _itemcode, _productName, _description, "invalid barcode");
+            CommandRouter.ExecuteCommand(newProductCommand);
+
+        }
+
         [Test]
         public void WarehouseCanStockNewProduct()
         {
