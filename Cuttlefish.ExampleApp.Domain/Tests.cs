@@ -22,6 +22,7 @@ namespace Cuttlefish.ExampleApp.Domain
         [SetUp]
         public void Setup()
         {
+            Core.Reset();
             Core.Instance
                 .WithDomainNamespaceRoot("Cuttlefish.ExampleApp.Domain")
                 .UseInMemoryEventStore()
@@ -45,7 +46,6 @@ namespace Cuttlefish.ExampleApp.Domain
         {
             var newProductCommand = new StartStockingProduct(Guid.NewGuid(), _itemcode, _productName, _description, "invalid barcode");
             CommandRouter.ExecuteCommand(newProductCommand);
-
         }
 
         [Test]

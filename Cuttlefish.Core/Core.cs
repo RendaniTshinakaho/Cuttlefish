@@ -109,7 +109,7 @@ namespace Cuttlefish
             return Instance;
         }
 
-        internal static void Reset()
+        public static void Reset()
         {
             Instance = new Core();
         }
