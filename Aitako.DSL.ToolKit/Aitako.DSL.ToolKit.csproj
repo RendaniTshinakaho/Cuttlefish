@@ -55,15 +55,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Content Include="DomainDefinitions\Catalogue.dd">
+    <None Include="ExampleApp.Domain">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DomainDefinitions\Accounts.dd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="DomainDefinitions\Orders.dd">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aitako.DSL\Aitako.DSL.csproj">

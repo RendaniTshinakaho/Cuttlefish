@@ -21,12 +21,12 @@ namespace Aitako.DSL.Tests
         public void CanAddCommands()
         {
             DomainObjectGeneratorBase person = Aggregate.AggregateNamed(NAME)
-                                                        .ThatCan("CapturePerson")
+                                                        .Can("CapturePerson")
                                                         .WithParameter<Guid>("Id")
                                                         .WithParameter<string>("Firstname")
                                                         .WithParameter<string>("Lastname")
                                                         .And()
-                                                        .ThatCan("ChangeLastname")
+                                                        .Can("ChangeLastname")
                                                         .WithParameter<string>("Lastname")
                                                         .Done();
 
@@ -37,7 +37,7 @@ namespace Aitako.DSL.Tests
         public void CanAddEvents()
         {
             DomainObjectGeneratorBase person = Aggregate.AggregateNamed(NAME)
-                                                        .ThatRaises("PersonCaptured")
+                                                        .RespondsTo("PersonCaptured")
                                                         .WithParameter<Guid>("Id")
                                                         .WithParameter<string>("Firstname")
                                                         .WithParameter<string>("Lastname")
@@ -63,12 +63,12 @@ namespace Aitako.DSL.Tests
                                                         .WithField<string>("Firstname")
                                                         .WithField<string>("Lastname")
                                                         .WithField<Guid>("SomeId")
-                                                        .ThatCan("CapturePerson")
+                                                        .Can("CapturePerson")
                                                         .WithParameter<Guid>("Id")
                                                         .WithParameter<string>("Firstname")
                                                         .WithParameter<string>("Lastname")
                                                         .And()
-                                                        .ThatRaises("PersonCaptured")
+                                                        .RespondsTo("PersonCaptured")
                                                         .WithParameter<Guid>("Id")
                                                         .WithParameter<string>("Firstname")
                                                         .WithParameter<string>("Lastname")

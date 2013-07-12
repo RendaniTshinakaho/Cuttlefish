@@ -56,7 +56,7 @@ namespace Aitako.DSL
             return this;
         }
 
-        public Command ThatCan(string commandName)
+        public Command Can(string commandName)
         {
             Command command = Command.Create(commandName, this);
             Commands.Add(command);
@@ -64,7 +64,7 @@ namespace Aitako.DSL
             return command;
         }
 
-        public Event ThatRaises(string eventName)
+        public Event RespondsTo(string eventName)
         {
             Event @event = Event.Create(eventName, this);
             Events.Add(@event);
@@ -102,8 +102,8 @@ namespace Aitako.DSL
                 WithField<bool>(attributeName);
             }
 
-            ThatCan(string.Format("Hide{0}", Name)).WithParameter<Guid>("Id");
-            ThatRaises(string.Format("{0}Hidden", Name)).WithParameter<Guid>("Id");
+            Can(string.Format("Hide{0}", Name)).WithParameter<Guid>("Id");
+            RespondsTo(string.Format("{0}Hidden", Name)).WithParameter<Guid>("Id");
 
             return this;
         }
@@ -116,8 +116,8 @@ namespace Aitako.DSL
                 WithField<bool>(attributeName);
             }
 
-            ThatCan(string.Format("Make{0}Visible", Name)).WithParameter<Guid>("Id");
-            ThatRaises(string.Format("{0}MadeVisible", Name)).WithParameter<Guid>("Id");
+            Can(string.Format("Make{0}Visible", Name)).WithParameter<Guid>("Id");
+            RespondsTo(string.Format("{0}MadeVisible", Name)).WithParameter<Guid>("Id");
 
             return this;
         }

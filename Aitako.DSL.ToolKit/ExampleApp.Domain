@@ -1,0 +1,41 @@
+﻿Make.WithNamespace("Cuttlefish.ExampleApp.Domain");
+
+Make.InTheBoundedContextOf("Warehouse");
+
+Service.ServiceNamed("Warehouse")
+		.Can("StartStockingProduct")
+				.WithParameter<string>("ItemCode")
+				.WithParameter<string>("Name")
+				.WithParameter<string>("Description")
+				.WithParameter<string>("Barcode")
+		.And()	
+		.Can("Rename").WithParameter<string>("Name")
+		.And()
+		.Can("AcceptShipmentOfProduct")
+				.WithParameter<int>("Quantity")
+		.And()	
+		.Can("BookOutStockAgainstOrder")
+				.WithParameter<int>("Quantity")
+				.WithParameter<int>("OrderNumber")
+		.And()	
+		.Can("SuspendSaleOfProduct")
+		.And()	
+		.Can("DiscontinueProduct")
+		.Done();
+		
+
+Aggregate.AggregateNamed("Product")
+		.ThatHasALastChangedTimestamp().WithField<string>("ItemCode").WithField<string>("Name").WithField<string>("Description").WithField<string>("Barcode").WithField<bool>("Suspended").WithField<bool>("Discontinued").WithField<int>("QuantityOnHand")
+		.And()
+		.RespondsTo("NewProductAddedToWarehouse").WithParameter<string>("ItemCode").WithParameter<string>("Name").WithParameter<string>("Description").WithParameter<string>("Barcode").WithParameter<double>("Price").WithParameter<int>("TaxType")
+		.And()
+		.RespondsTo("Renamed").WithParameter<string>("Name")		
+		.And()
+		.RespondsTo("Discontinued")		
+		.And()
+		.RespondsTo("Suspended")		
+		.And()
+		.RespondsTo("StockReceived").WithParameter<int>("Quantity")				
+		.And()
+		.RespondsTo("StockBookedOut").WithParameter<int>("Quantity").WithParameter<int>("OrderNumber")		
+	.Done();
