@@ -13,6 +13,12 @@ namespace Cuttlefish.ExampleApp.Domain
     [TestFixture]
     public class Tests
     {
+        private Guid _productId;
+        private string _itemcode;
+        private string _productName;
+        private string _description;
+        private string _barcode;
+
         [SetUp]
         public void Setup()
         {
@@ -20,20 +26,26 @@ namespace Cuttlefish.ExampleApp.Domain
                 .WithDomainNamespaceRoot("Cuttlefish.ExampleApp.Domain")
                 .UseInMemoryEventStore()
                 .Done();
+
+            _productName = "Widget X";
+            _description = "blah blah blah";
+            _itemcode = "X0001";
+            _barcode = "123456";
+            var newProductCommand = new StartStockingProduct(Guid.NewGuid(), _itemcode, _productName, _description, _barcode);
+            CommandRouter.ExecuteCommand(newProductCommand);
+
+            _productId = newProductCommand.AggregateIdentity;
         }
 
         [Test]
         public void WarehouseCanStockNewProduct()
         {
-            var newProductCommand = new StartStockingProduct(Guid.NewGuid(), "X0001", "Widget X", "blah blah blah", "123456");
-            CommandRouter.ExecuteCommand(newProductCommand);
-
-            var product = AggregateBuilder.Get<ProductAggregate>(newProductCommand.AggregateIdentity);
+            var product = AggregateBuilder.Get<ProductAggregate>(_productId);
             Assert.That(product, Is.Not.Null);
-            Assert.That(product.Barcode, Is.EqualTo(newProductCommand.Barcode));
-            Assert.That(product.Description, Is.EqualTo(newProductCommand.Description));
-            Assert.That(product.ItemCode, Is.EqualTo(newProductCommand.ItemCode));
-            Assert.That(product.Name, Is.EqualTo(newProductCommand.Name));
+            Assert.That(product.Barcode, Is.EqualTo(_barcode));
+            Assert.That(product.ItemCode, Is.EqualTo(_itemcode));
+            Assert.That(product.Name, Is.EqualTo(_productName));
+            Assert.That(product.Description, Is.EqualTo(_description));
         }
     }
 }
