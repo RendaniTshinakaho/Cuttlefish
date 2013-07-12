@@ -23,6 +23,11 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
                 throw new InvalidBarcodeException(cmd.Barcode);
             }
 
+            if (string.IsNullOrEmpty(cmd.Name))
+            {
+                throw new ProductStockingException(cmd);
+            }
+
             new ProductAggregate().FireEvent(new NewProductAddedToWarehouse(cmd.AggregateIdentity, cmd.ItemCode, cmd.Name, cmd.Description, cmd.Barcode));
         }
 
