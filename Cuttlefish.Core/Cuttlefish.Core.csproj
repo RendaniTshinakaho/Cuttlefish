@@ -103,7 +103,7 @@
       <Project>{8e6ad6cf-508e-4fc0-9f2e-32f0cc678653}</Project>
       <Name>Cuttlefish.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Cuttlefish.Storage.MongoDB\Cuttlefish.Storage.MongoDB.csproj">
+    <ProjectReference Include="..\Extensions\Cuttlefish.Storage.MongoDB\Cuttlefish.Storage.MongoDB.csproj">
       <Project>{a05c964c-e3d8-4314-8add-911244e4acda}</Project>
       <Name>Cuttlefish.Storage.MongoDB</Name>
     </ProjectReference>

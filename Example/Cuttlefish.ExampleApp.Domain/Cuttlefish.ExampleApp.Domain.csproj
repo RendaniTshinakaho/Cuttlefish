@@ -61,15 +61,15 @@
     <Compile Include="Warehouse\WarehouseService\WarehouseService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Cuttlefish.Common\Cuttlefish.Common.csproj">
+    <ProjectReference Include="..\..\Cuttlefish.Common\Cuttlefish.Common.csproj">
       <Project>{8e6ad6cf-508e-4fc0-9f2e-32f0cc678653}</Project>
       <Name>Cuttlefish.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Cuttlefish.Core\Cuttlefish.Core.csproj">
+    <ProjectReference Include="..\..\Cuttlefish.Core\Cuttlefish.Core.csproj">
       <Project>{39F351E1-A9A6-423A-9171-B41626506881}</Project>
       <Name>Cuttlefish.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Cuttlefish.EventStorage.NEventStore\Cuttlefish.EventStorage.NEventStore.csproj">
+    <ProjectReference Include="..\..\Extensions\Cuttlefish.EventStorage.NEventStore\Cuttlefish.EventStorage.NEventStore.csproj">
       <Project>{B98A6356-875A-49DD-89EA-411554CF55B0}</Project>
       <Name>Cuttlefish.EventStorage.NEventStore</Name>
     </ProjectReference>

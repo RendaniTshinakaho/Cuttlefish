@@ -56,15 +56,15 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Cuttlefish.Common\Cuttlefish.Common.csproj">
+    <ProjectReference Include="..\..\Cuttlefish.Common\Cuttlefish.Common.csproj">
       <Project>{8E6AD6CF-508E-4FC0-9F2E-32F0CC678653}</Project>
       <Name>Cuttlefish.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Cuttlefish.Core\Cuttlefish.Core.csproj">
+    <ProjectReference Include="..\..\Cuttlefish.Core\Cuttlefish.Core.csproj">
       <Project>{39f351e1-a9a6-423a-9171-b41626506881}</Project>
       <Name>Cuttlefish.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Cuttlefish.EventStorage.NEventStore\Cuttlefish.EventStorage.NEventStore.csproj">
+    <ProjectReference Include="..\..\Extensions\Cuttlefish.EventStorage.NEventStore\Cuttlefish.EventStorage.NEventStore.csproj">
       <Project>{b98a6356-875a-49dd-89ea-411554cf55b0}</Project>
       <Name>Cuttlefish.EventStorage.NEventStore</Name>
     </ProjectReference>

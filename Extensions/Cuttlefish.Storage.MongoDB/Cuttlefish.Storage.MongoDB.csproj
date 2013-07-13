@@ -68,7 +68,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Cuttlefish.Common\Cuttlefish.Common.csproj">
+    <ProjectReference Include="..\..\Cuttlefish.Common\Cuttlefish.Common.csproj">
       <Project>{8E6AD6CF-508E-4FC0-9F2E-32F0CC678653}</Project>
       <Name>Cuttlefish.Common</Name>
     </ProjectReference>
