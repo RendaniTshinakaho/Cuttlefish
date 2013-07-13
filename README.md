@@ -11,7 +11,7 @@ A basic and functional example of a domain built with the framework is included 
 #####Quick Setup
 Getting the framework up and running is super easy. Assuming that we are using RabbitMQ with a MongoDB event store backing, we would set up the framework as follows:
 
-```
+```C#
 // Starts up the configuration interface
 Core.Configure()
  
@@ -64,7 +64,7 @@ The 4 things you'll need to work with to start setting up your domain are comman
 ######Commands
 We'll start with commands. They tell our domain what to do. They can be defined by implementing the ICommand interface as below. Commands are handled by either aggregates or services, but we'll get to how that works in a bit.
 
-```
+```C#
 public class StartStockingProduct : ICommand
 {
     private readonly int _version;
@@ -102,7 +102,7 @@ In the example above, we are creating a command which tells the warehouse servic
 
 To execute commands against domain services or aggregates, we make use of the CommandRouter. The router is clever enough to know which service or aggregate should react to the command. Only a single handler may be registered to handle commands. The code below illustrates how we would execute a command through the router.
 
-```
+```C#
 _productName = "Widget X";
 _description = "blah blah blah";
 _itemcode = "X0001";
@@ -120,7 +120,7 @@ In the example above, the command router knows which handler the command should 
 
 What do these aggregates and services look like? You might ask. Well, here is an example of a service which models the way a warehouse might work in an over-simplified business scenario.
 
-```
+```C#
 public class WarehouseService : IService
 {
     public void On(StartStockingProduct cmd)
@@ -223,7 +223,7 @@ We also see a bunch of _On_ methods; each accepting a single command object as a
 
 The event router is used to publish events from Services. This is done by simply calling the event router and providing an event with the required parameters and type.
 
-```
+```C#
 EventRouter.FireEventOnAggregate<ProductAggregate>(new Discontinued(cmd.AggregateIdentity));
 ```
 
@@ -235,7 +235,7 @@ The last thing we see in our service, is that there are a few methods that wrap 
 
 Events are very similar to commands in that they are merely carriers of information. In the case of commands, we wish to _carry intent_. In the case of events, we wish to carry _'what has been done'_. 
 
-```
+```C#
 public class StockReceived : IEvent
 {
     private readonly int _version;
@@ -269,7 +269,7 @@ The event only contains information that is required to process the fact that st
 
 Aggregates are the meat of our domain. They are generally models of real-world items or documents and should be rich and extensive. In the example below, we are modeling a product from a warehouse perspective. The warehouse doesn't care about pricing information, as its main area of concern is stock levels and maintaining a catalogue.
 
-```
+```C#
 public class ProductAggregate : AggregateBase
 {
     public ProductAggregate() : base(new List<IEvent>())
@@ -335,7 +335,7 @@ There are various _When_ methods, which are capable of accepting individual even
 
 The reason we pass a set of events into the constructor is that the base class executes the associated When method for each event in that set to rehydrate the aggregate based on actual history. This allows us to change how the domain responds to certain events historically. The code below illustrates what the base constructor does.
 
-```
+```C#
 foreach (IEvent @event in events)
 {
     InvokeEvent(this, @event);
@@ -347,7 +347,7 @@ The _InvokeEvent_ method simply calls the required When method on the aggregate 
 Events have version numbers attached to them, so we have the ability to change our domain logic based on different sets of events. This makes dealing with change a bit less painful. For extensive changes in the domain model, it is suggested that a migration approach be followed and that events are rewritten.
 
 That's cool and stuff, but how the hell do I get hold of an aggregate once I've created it?
-```
+```C#
 var product = AggregateBuilder.Get<ProductAggregate>(_productId);
 ```
 Aggregates have GUIDs for unique identifiers. The AggregateBuilder.Get method builds an aggregate from its events that are fetched from the event store based on its unique key.
