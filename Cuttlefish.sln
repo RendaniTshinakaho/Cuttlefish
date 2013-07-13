@@ -13,15 +13,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A74642
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuttlefish.Core", "Cuttlefish.Core\Cuttlefish.Core.csproj", "{39F351E1-A9A6-423A-9171-B41626506881}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuttlefish.Caches.BasicInMemory", "Cuttlefish.Caches.BasicInMemory\Cuttlefish.Caches.BasicInMemory.csproj", "{0C7EEF0D-CB12-4C58-81FE-EAB7489AF272}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions\Cuttlefish.Caches.BasicInMemory", "Cuttlefish.Caches.BasicInMemory\Cuttlefish.Caches.BasicInMemory.csproj", "{0C7EEF0D-CB12-4C58-81FE-EAB7489AF272}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuttlefish.Common", "Cuttlefish.Common\Cuttlefish.Common.csproj", "{8E6AD6CF-508E-4FC0-9F2E-32F0CC678653}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuttlefish.Storage.MongoDB", "Cuttlefish.Storage.MongoDB\Cuttlefish.Storage.MongoDB.csproj", "{A05C964C-E3D8-4314-8ADD-911244E4ACDA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions\Cuttlefish.Storage.MongoDB", "Cuttlefish.Storage.MongoDB\Cuttlefish.Storage.MongoDB.csproj", "{A05C964C-E3D8-4314-8ADD-911244E4ACDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuttlefish.EventStorage.NEventStore", "Cuttlefish.EventStorage.NEventStore\Cuttlefish.EventStorage.NEventStore.csproj", "{B98A6356-875A-49DD-89EA-411554CF55B0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions\Cuttlefish.EventStorage.NEventStore", "Cuttlefish.EventStorage.NEventStore\Cuttlefish.EventStorage.NEventStore.csproj", "{B98A6356-875A-49DD-89EA-411554CF55B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuttlefish.AggregatePublishers.MassTransit", "Cuttlefish.AggregatePublishers.MassTransit\Cuttlefish.AggregatePublishers.MassTransit.csproj", "{17AFA4A8-1E04-4A9A-B94E-29140A39B2A7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Extensions\Cuttlefish.AggregatePublishers.MassTransit", "Cuttlefish.AggregatePublishers.MassTransit\Cuttlefish.AggregatePublishers.MassTransit.csproj", "{17AFA4A8-1E04-4A9A-B94E-29140A39B2A7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuttlefish.Projections.AggregateUpdatedToMongoDB", "Cuttlefish.Projections.AggregateUpdatedToMongoDB\Cuttlefish.Projections.AggregateUpdatedToMongoDB.csproj", "{333A6E5E-892F-4BA9-9B95-2389F419878F}"
 EndProject
@@ -44,7 +44,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuttlefish.Tests.Core", "Cu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ExampleApplication", "ExampleApplication", "{19AA4B60-53E4-46FB-975C-065E775B07A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuttlefish.ExampleApp.Domain", "Cuttlefish.ExampleApp.Domain\Cuttlefish.ExampleApp.Domain.csproj", "{BEF012A9-A920-432B-90B2-F7EFFDFE4914}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example\Cuttlefish.ExampleApp.Domain", "Cuttlefish.ExampleApp.Domain\Cuttlefish.ExampleApp.Domain.csproj", "{BEF012A9-A920-432B-90B2-F7EFFDFE4914}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

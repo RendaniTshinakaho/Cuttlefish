@@ -6,8 +6,6 @@ Events are persisted through the excellent [NEventStore](http://neventstore.org)
 
 A basic and functional example of a domain built with the framework is included under the Cuttlefish.ExampleApp.Domain folder. It illustrates the use of commands, aggregates, services and events in the context of the Cuttlefish framework.
 
-####NOT READY FOR USE IN PRODUCTION YET. A lot of documentation still needs to be written and some refactoring and tweaking still needs to take place before I'd start using this on smaller projects.
-
 #####Quick Setup
 Getting the framework up and running is super easy. Assuming that we are using RabbitMQ with a MongoDB event store backing, we would set up the framework as follows:
 
