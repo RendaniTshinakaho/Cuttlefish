@@ -74,8 +74,8 @@ public class StartStockingProduct : ICommand
         _version = 1;
     }
 
-    public StartStockingProduct(Guid aggregateidentity, String itemcode, String name, String description,
-                                String barcode) : this()
+    public StartStockingProduct(Guid aggregateidentity, String itemcode, String name, 
+                                String description, String barcode) : this()
     {
         AggregateIdentity = aggregateidentity;
         ItemCode = itemcode;
@@ -108,7 +108,8 @@ _description = "blah blah blah";
 _itemcode = "X0001";
 _barcode = "123456";
 
-var newProductCommand = new StartStockingProduct(Guid.NewGuid(), _itemcode, _productName, _description, _barcode);
+var newProductCommand = new StartStockingProduct(Guid.NewGuid(), _itemcode, 
+    _productName, _description, _barcode);
 
 CommandRouter.ExecuteCommand(newProductCommand);
 ```
@@ -134,10 +135,11 @@ public class WarehouseService : IService
             throw new ProductStockingException(cmd);
         }
 
-        EventRouter.FireEventOnAggregate<ProductAggregate>(new NewProductAddedToWarehouse(cmd.AggregateIdentity,
-                                                                                          cmd.ItemCode, cmd.Name,
-                                                                                          cmd.Description,
-                                                                                          cmd.Barcode));
+        EventRouter.FireEventOnAggregate<ProductAggregate>(
+            new NewProductAddedToWarehouse(cmd.AggregateIdentity,
+                                                  cmd.ItemCode, cmd.Name,
+                                                  cmd.Description,
+                                                  cmd.Barcode));
     }
 
     public void On(Rename cmd)
@@ -147,7 +149,8 @@ public class WarehouseService : IService
             throw new ProductStockingException(cmd);
         }
 
-        EventRouter.FireEventOnAggregate<ProductAggregate>(new Renamed(cmd.AggregateIdentity, cmd.Name));
+        EventRouter.FireEventOnAggregate<ProductAggregate>(new Renamed(cmd.AggregateIdentity, 
+            cmd.Name));
     }
 
     public void On(AcceptShipmentOfProduct cmd)
@@ -157,7 +160,8 @@ public class WarehouseService : IService
             throw new InvalidQuantityException();
         }
 
-        EventRouter.FireEventOnAggregate<ProductAggregate>(new StockReceived(cmd.AggregateIdentity, cmd.Quantity));
+        EventRouter.FireEventOnAggregate<ProductAggregate>(new StockReceived(cmd.AggregateIdentity, 
+            cmd.Quantity));
     }
 
     public void On(BookOutStockAgainstOrder cmd)
@@ -172,7 +176,8 @@ public class WarehouseService : IService
             throw new OutOfStockException();
         }
 
-        EventRouter.FireEventOnAggregate<ProductAggregate>(new StockBookedOut(cmd.AggregateIdentity, cmd.Quantity));
+        EventRouter.FireEventOnAggregate<ProductAggregate>(new StockBookedOut(cmd.AggregateIdentity, 
+            cmd.Quantity));
     }
 
     public void On(SuspendSaleOfProduct cmd)
