@@ -32,22 +32,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Magnum, Version=2.1.0.0, Culture=neutral, PublicKeyToken=b800c4cfcdeea87b, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Magnum.2.1.0\lib\NET40\Magnum.dll</HintPath>
+    <Reference Include="Magnum">
+      <HintPath>..\..\packages\Magnum.2.1.0\lib\NET40\Magnum.dll</HintPath>
     </Reference>
-    <Reference Include="MassTransit, Version=2.7.0.0, Culture=neutral, PublicKeyToken=b8e0e9f2f1e657fa, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MassTransit.2.7.4\lib\net40\MassTransit.dll</HintPath>
+    <Reference Include="MassTransit">
+      <HintPath>..\..\packages\MassTransit.2.7.4\lib\net40\MassTransit.dll</HintPath>
     </Reference>
     <Reference Include="MassTransit.Transports.MSMQ">
-      <HintPath>..\packages\MassTransit.2.7.4\lib\net40\MassTransit.Transports.MSMQ.dll</HintPath>
-    </Reference>
-    <Reference Include="MassTransit.Transports.RabbitMq">
-      <HintPath>..\packages\MassTransit.RabbitMQ.2.7.4\lib\net40\MassTransit.Transports.RabbitMq.dll</HintPath>
+      <HintPath>..\..\packages\MassTransit.2.7.4\lib\net40\MassTransit.Transports.MSMQ.dll</HintPath>
     </Reference>
     <Reference Include="RabbitMQ.Client">
-      <HintPath>..\packages\RabbitMQ.Client.3.0.4\lib\net30\RabbitMQ.Client.dll</HintPath>
+      <HintPath>..\..\packages\RabbitMQ.Client.3.1.1\lib\net30\RabbitMQ.Client.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
