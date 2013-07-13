@@ -24,7 +24,7 @@ namespace Cuttlefish.EventStorage.NEventStore
                                   .Ctor<IStoreEvents>()
                                   .Is(nEventStore));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception("Failed to execute wireup for event store.");
             }
@@ -50,7 +50,7 @@ namespace Cuttlefish.EventStorage.NEventStore
                                   .Ctor<IStoreEvents>()
                                   .Is(Wireup.Init().UsingInMemoryPersistence().Build()));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception("Failed to execute wireup for event store.");
             }

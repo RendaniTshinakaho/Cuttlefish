@@ -16,7 +16,7 @@ namespace Cuttlefish.Projections.AggregateUpdatedToMongoDB
                 store.SaveOrUpdate(x);
                 Console.WriteLine("Saved {0} with id: {1}", message.TypeName, message.AggregateIdentity);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Console.Write("Failed to save {0} with id: {1}", message.TypeName, message.AggregateIdentity);
             }
