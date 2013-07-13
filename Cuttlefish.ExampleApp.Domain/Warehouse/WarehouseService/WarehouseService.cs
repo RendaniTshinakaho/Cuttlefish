@@ -28,7 +28,7 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
                 throw new ProductStockingException(cmd);
             }
 
-            new ProductAggregate().FireEvent(new NewProductAddedToWarehouse(cmd.AggregateIdentity, cmd.ItemCode, cmd.Name, cmd.Description, cmd.Barcode));
+            EventRouter.FireEventOnAggregate<ProductAggregate>(new NewProductAddedToWarehouse(cmd.AggregateIdentity, cmd.ItemCode, cmd.Name, cmd.Description, cmd.Barcode));
         }
 
 
@@ -39,7 +39,7 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
                 throw new ProductStockingException(cmd);
             }
 
-            new ProductAggregate().FireEvent(new Renamed(cmd.AggregateIdentity, cmd.Name));
+            EventRouter.FireEventOnAggregate<ProductAggregate>(new Renamed(cmd.AggregateIdentity, cmd.Name));
         }
 
         public void On(AcceptShipmentOfProduct cmd)
@@ -49,7 +49,7 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
                 throw new InvalidQuantityException();
             }
 
-            new ProductAggregate().FireEvent(new StockReceived(cmd.AggregateIdentity, cmd.Quantity));
+            EventRouter.FireEventOnAggregate<ProductAggregate>(new StockReceived(cmd.AggregateIdentity, cmd.Quantity));
         }
 
         private static bool IsValidQuantity(int quantity)
@@ -69,7 +69,7 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
                 throw new OutOfStockException();
             }
 
-            new ProductAggregate().FireEvent(new StockBookedOut(cmd.AggregateIdentity, cmd.Quantity));
+            EventRouter.FireEventOnAggregate<ProductAggregate>(new StockBookedOut(cmd.AggregateIdentity, cmd.Quantity));
         }
 
         private static bool ItemIsInStockForQuantityRequired(Guid aggregateIdentity, int quantityRequired)
@@ -82,12 +82,12 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
 
         public void On(SuspendSaleOfProduct cmd)
         {
-            new ProductAggregate().FireEvent(new Suspended(cmd.AggregateIdentity));
+            EventRouter.FireEventOnAggregate<ProductAggregate>(new Suspended(cmd.AggregateIdentity));
         }
 
         public void On(DiscontinueProduct cmd)
         {
-            new ProductAggregate().FireEvent(new Discontinued(cmd.AggregateIdentity));
+            EventRouter.FireEventOnAggregate<ProductAggregate>(new Discontinued(cmd.AggregateIdentity));
         }
 
         #region Rules

@@ -91,6 +91,7 @@
     <Compile Include="AggregateBase.cs" />
     <Compile Include="AggregateBuilder.cs" />
     <Compile Include="CommandRouter.cs" />
+    <Compile Include="EventRouter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core.cs" />
   </ItemGroup>

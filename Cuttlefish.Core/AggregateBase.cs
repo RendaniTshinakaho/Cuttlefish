@@ -9,11 +9,24 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Cuttlefish
 {
+    /// <summary>
+    /// Base type which all aggregates inherit from
+    /// </summary>
     public abstract class AggregateBase : IAggregate
     {
+        /// <summary>
+        /// true when the aggregate is being hydrated in the constructor. used to prevent events from 
+        /// being propagated to the message bus every time they are loaded.
+        /// </summary>
         private readonly bool _aggregateLoading;
+
+
         private string _typeName;
 
+        /// <summary>
+        /// Constructor which allows an aggregate to be hydrated from events.
+        /// </summary>
+        /// <param name="events">List of events ordered by timestamp</param>
         protected AggregateBase(IEnumerable<IEvent> events)
         {
             _aggregateLoading = true;
@@ -34,6 +47,9 @@ namespace Cuttlefish
             }
         }
 
+        /// <summary>
+        /// The main unique aggregate identifier
+        /// </summary>
         [BsonId]
         public Guid AggregateIdentity { get; set; }
 
@@ -42,23 +58,15 @@ namespace Cuttlefish
             get { return _typeName ?? (_typeName = GetType().FullName); }
         }
 
-        public void FireEvent(IEvent @event)
+        protected void FireEvent(IEvent @event)
         {
-            try
-            {
-                InvokeEvent(this, @event);
-                Core.Instance.EventStore.AddEvent(@event);
-            }
-            catch
-            {
-                throw new EventExecutionException(this, @event);
-            }
+            EventRouter.FireEventOnAggregate(this, @event);
         }
 
-        protected void InvokeEvent(AggregateBase instance, IEvent @event)
+        private void InvokeEvent(AggregateBase instance, IEvent @event)
         {
             Type eventType = @event.GetType();
-            // could probably do with some caching here. should be pretty easy to do.
+
             MethodInfo eventHandlerMethod =
                 instance.GetType()
                         .Methods()
@@ -74,6 +82,11 @@ namespace Cuttlefish
                     UpdateAggregateCache(instance);
                 }
             }
+        }
+
+        internal void InvokeEvent(IEvent @event)
+        {
+            InvokeEvent(this, @event);
         }
 
         /// <summary>
