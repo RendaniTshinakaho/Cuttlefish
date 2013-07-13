@@ -59,7 +59,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AggregateGenerator.tt</DependentUpon>
-    </Compile>
+    </Compile> 
     <Compile Include="Tests\AggregateTests.cs" />
     <Compile Include="Compiler.cs" />
     <Compile Include="Components\Service.cs" />
