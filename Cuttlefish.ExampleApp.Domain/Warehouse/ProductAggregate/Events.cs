@@ -140,15 +140,13 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
             _version = 1;
         }
 
-        public StockBookedOut(Guid aggregateidentity, Int32 quantity, Int32 ordernumber) : this()
+        public StockBookedOut(Guid aggregateidentity, Int32 quantity) : this()
         {
             AggregateIdentity = aggregateidentity;
             Quantity = quantity;
-            OrderNumber = ordernumber;
         }
 
         public Int32 Quantity { get; private set; }
-        public Int32 OrderNumber { get; private set; }
 
         public int Version
         {

@@ -103,5 +103,43 @@ namespace Cuttlefish.ExampleApp.Domain
             Assert.That(product.QuantityOnHand, Is.EqualTo(quantity));
         }
 
+        [Test]
+        public void WarehouseCanAcceptMultipleShipments()
+        {
+            const int quantity = 100;
+            const int shipments = 10;
+            for (int i = 0; i < shipments; i++)
+            {
+                CommandRouter.ExecuteCommand(new AcceptShipmentOfProduct(_productId, quantity));
+            }
+            var product = AggregateBuilder.Get<ProductAggregate>(_productId);
+            Assert.That(product.QuantityOnHand, Is.EqualTo(quantity * shipments));
+        }
+
+        [Test]
+        public void WarehouseCanBookOutStock()
+        {
+            const int initialQuantity = 1000;
+            const int quantityToBookOut = 800;
+            CommandRouter.ExecuteCommand(new AcceptShipmentOfProduct(_productId, initialQuantity));
+            CommandRouter.ExecuteCommand(new BookOutStockAgainstOrder(_productId, quantityToBookOut));
+
+            var product = AggregateBuilder.Get<ProductAggregate>(_productId);
+            Assert.That(product.QuantityOnHand, Is.EqualTo(initialQuantity - quantityToBookOut));
+        }
+
+        [Test]
+        [ExpectedException(typeof(OutOfStockException))]
+        public void WarehouseThrowsOutOfStockExceptionWhenOrderExceedsQuantityOnHand()
+        {
+            const int initialQuantity = 500;
+            const int quantityToBookOut = 800;
+            CommandRouter.ExecuteCommand(new AcceptShipmentOfProduct(_productId, initialQuantity));
+            CommandRouter.ExecuteCommand(new BookOutStockAgainstOrder(_productId, quantityToBookOut));
+        }
+    }
+
+    public class OutOfStockException : Exception
+    {
     }
 }

@@ -58,7 +58,7 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
 
         public void When(StockBookedOut evt)
         {
-            throw new NotImplementedException();
+            QuantityOnHand -= evt.Quantity;
         }
     }
 }

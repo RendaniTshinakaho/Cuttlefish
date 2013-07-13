@@ -59,7 +59,25 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
 
         public void On(BookOutStockAgainstOrder cmd)
         {
-            throw new NotImplementedException();
+            if (!IsValidQuantity(cmd.Quantity))
+            {
+                throw new InvalidQuantityException();
+            }
+
+            if (!ItemIsInStockForQuantityRequired(cmd.AggregateIdentity, cmd.Quantity))
+            {
+                throw new OutOfStockException();
+            }
+
+            new ProductAggregate().FireEvent(new StockBookedOut(cmd.AggregateIdentity, cmd.Quantity));
+        }
+
+        private static bool ItemIsInStockForQuantityRequired(Guid aggregateIdentity, int quantityRequired)
+        {
+            // this could come from a projection to improve performance, but data might be slightly out of date then. 
+            // This could cause orders for out of stock items to be processed.
+            var product = AggregateBuilder.Get<ProductAggregate>(aggregateIdentity);
+            return product.QuantityOnHand >= quantityRequired;
         }
 
         public void On(SuspendSaleOfProduct cmd)
