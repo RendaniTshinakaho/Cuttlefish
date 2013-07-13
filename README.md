@@ -120,6 +120,113 @@ In the example above, the command router knows which handler the command should 
 
 What do these aggregates and services look like? You might ask. Well, here is an example of a service which models the way a warehouse might work in an over-simplified business scenario.
 
+```
+public class WarehouseService : IService
+{
+    public void On(StartStockingProduct cmd)
+    {
+        if (!BarcodeLengthIsCorrect(cmd.Barcode))
+        {
+            throw new InvalidBarcodeException(cmd.Barcode);
+        }
+
+        if (!NameIsValid(cmd.Name))
+        {
+            throw new ProductStockingException(cmd);
+        }
+
+        EventRouter.FireEventOnAggregate<ProductAggregate>(new NewProductAddedToWarehouse(cmd.AggregateIdentity,
+                                                                                          cmd.ItemCode, cmd.Name,
+                                                                                          cmd.Description,
+                                                                                          cmd.Barcode));
+    }
+
+    public void On(Rename cmd)
+    {
+        if (!NameIsValid(cmd.Name))
+        {
+            throw new ProductStockingException(cmd);
+        }
+
+        EventRouter.FireEventOnAggregate<ProductAggregate>(new Renamed(cmd.AggregateIdentity, cmd.Name));
+    }
+
+    public void On(AcceptShipmentOfProduct cmd)
+    {
+        if (!IsValidQuantity(cmd.Quantity))
+        {
+            throw new InvalidQuantityException();
+        }
+
+        EventRouter.FireEventOnAggregate<ProductAggregate>(new StockReceived(cmd.AggregateIdentity, cmd.Quantity));
+    }
+
+    public void On(BookOutStockAgainstOrder cmd)
+    {
+        if (!IsValidQuantity(cmd.Quantity))
+        {
+            throw new InvalidQuantityException();
+        }
+
+        if (!ItemIsInStockForQuantityRequired(cmd.AggregateIdentity, cmd.Quantity))
+        {
+            throw new OutOfStockException();
+        }
+
+        EventRouter.FireEventOnAggregate<ProductAggregate>(new StockBookedOut(cmd.AggregateIdentity, cmd.Quantity));
+    }
+
+    public void On(SuspendSaleOfProduct cmd)
+    {
+        EventRouter.FireEventOnAggregate<ProductAggregate>(new Suspended(cmd.AggregateIdentity));
+    }
+
+    public void On(DiscontinueProduct cmd)
+    {
+        EventRouter.FireEventOnAggregate<ProductAggregate>(new Discontinued(cmd.AggregateIdentity));
+    }
+
+    #region Validation Rules
+
+    private static bool ItemIsInStockForQuantityRequired(Guid aggregateIdentity, int quantityRequired)
+    {
+        var product = AggregateBuilder.Get<ProductAggregate>(aggregateIdentity);
+        return product.QuantityOnHand >= quantityRequired;
+    }
+
+    private static bool BarcodeLengthIsCorrect(string barcode)
+    {
+        const int barcodeLength = 6;
+        return barcode.Length == barcodeLength;
+    }
+
+    private static bool NameIsValid(string name)
+    {
+        return !string.IsNullOrEmpty(name);
+    }
+
+    private static bool IsValidQuantity(int quantity)
+    {
+        return quantity > 0;
+    }
+    #endregion
+}
+```
+
+From the code above, we can see that services implement the IService interface, which is used to decorate the resulting class as being a service.
+
+We also see a bunch of On methods; each accepting a single command object as a parameter. These are the command handlers. Aggregates are also able to have command handlers, in cases where it makes sense to model the domain in such a manner. The role of a command handler is to establish whether a command is valid and the state of the aggregate in question permits the action which the command is trying to execute. If all goes well and the command is able to execute without failing business rule validation, an event is created to signify that an action has taken place.
+
+The event router is used to publish events from Services. This is done by simply calling the event router and providing an event with the required parameters and type.
+
+```
+EventRouter.FireEventOnAggregate<ProductAggregate>(new Discontinued(cmd.AggregateIdentity));
+```
+
+This will cause an event to be persisted to the event store; the event to be published to the messagebus (if specified in the core setup); and if enabled, it will also cause the latest version of the aggregate which responds to the event (if any) to be published to the specified cache.
+
+
+
 ######Events
 
 #####DSL

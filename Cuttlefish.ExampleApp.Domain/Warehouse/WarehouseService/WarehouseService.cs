@@ -4,18 +4,8 @@ using Cuttlefish.Common;
 
 namespace Cuttlefish.ExampleApp.Domain.Warehouse
 {
-    public class WarehouseService : AggregateBase
+    public class WarehouseService : IService
     {
-        public WarehouseService()
-            : base(new List<IEvent>())
-        {
-        }
-
-        public WarehouseService(IEnumerable<IEvent> events)
-            : base(events)
-        {
-        }
-
         public void On(StartStockingProduct cmd)
         {
             if (!BarcodeLengthIsCorrect(cmd.Barcode))
@@ -33,7 +23,6 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
                                                                                               cmd.Description,
                                                                                               cmd.Barcode));
         }
-
 
         public void On(Rename cmd)
         {
@@ -55,11 +44,6 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
             EventRouter.FireEventOnAggregate<ProductAggregate>(new StockReceived(cmd.AggregateIdentity, cmd.Quantity));
         }
 
-        private static bool IsValidQuantity(int quantity)
-        {
-            return quantity > 0;
-        }
-
         public void On(BookOutStockAgainstOrder cmd)
         {
             if (!IsValidQuantity(cmd.Quantity))
@@ -75,14 +59,6 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
             EventRouter.FireEventOnAggregate<ProductAggregate>(new StockBookedOut(cmd.AggregateIdentity, cmd.Quantity));
         }
 
-        private static bool ItemIsInStockForQuantityRequired(Guid aggregateIdentity, int quantityRequired)
-        {
-            // this could come from a projection to improve performance, but data might be slightly out of date then. 
-            // This could cause orders for out of stock items to be processed.
-            var product = AggregateBuilder.Get<ProductAggregate>(aggregateIdentity);
-            return product.QuantityOnHand >= quantityRequired;
-        }
-
         public void On(SuspendSaleOfProduct cmd)
         {
             EventRouter.FireEventOnAggregate<ProductAggregate>(new Suspended(cmd.AggregateIdentity));
@@ -93,7 +69,13 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
             EventRouter.FireEventOnAggregate<ProductAggregate>(new Discontinued(cmd.AggregateIdentity));
         }
 
-        #region Rules
+        #region Validation Rules
+
+        private static bool ItemIsInStockForQuantityRequired(Guid aggregateIdentity, int quantityRequired)
+        {
+            var product = AggregateBuilder.Get<ProductAggregate>(aggregateIdentity);
+            return product.QuantityOnHand >= quantityRequired;
+        }
 
         private static bool BarcodeLengthIsCorrect(string barcode)
         {
@@ -106,6 +88,10 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
             return !string.IsNullOrEmpty(name);
         }
 
+        private static bool IsValidQuantity(int quantity)
+        {
+            return quantity > 0;
+        }
         #endregion
     }
 }
