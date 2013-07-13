@@ -60,12 +60,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Aitako.DSL\Aitako.DSL.csproj">
-      <Project>{bb60c642-2ba6-4205-a1be-cda6e4e73441}</Project>
-      <Name>Aitako.DSL</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
