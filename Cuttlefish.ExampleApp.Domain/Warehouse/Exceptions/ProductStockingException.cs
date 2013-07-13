@@ -1,12 +1,13 @@
 using System;
+using Cuttlefish.Common;
 
 namespace Cuttlefish.ExampleApp.Domain.Warehouse
 {
     public class ProductStockingException : Exception
     {
-        public StartStockingProduct OriginalCommand { get; private set; }
+        public ICommand OriginalCommand { get; private set; }
 
-        public ProductStockingException(StartStockingProduct cmd)
+        public ProductStockingException(ICommand cmd)
         {
             OriginalCommand = cmd;
         }

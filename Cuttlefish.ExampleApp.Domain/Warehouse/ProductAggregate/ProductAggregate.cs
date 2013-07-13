@@ -15,14 +15,13 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
         }
 
         public DateTime LastChanged { get; protected set; }
-        public String ItemCode { get; protected set; }
-        public String Name { get; protected set; }
-        public String Description { get; protected set; }
-        public String Barcode { get; protected set; }
-        public Boolean Suspended { get; protected set; }
-        public Boolean Discontinued { get; protected set; }
-        public Int32 QuantityOnHand { get; protected set; }
-
+        public String ItemCode { get; private set; }
+        public String Name { get; private set; }
+        public String Description { get; private set; }
+        public String Barcode { get; private set; }
+        public Boolean Suspended { get; private set; }
+        public Boolean Discontinued { get; private set; }
+        public Int32 QuantityOnHand { get; private set; }
 
         public void When(NewProductAddedToWarehouse evt)
         {
@@ -39,22 +38,22 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
 
         public void When(Renamed evt)
         {
-            throw new NotImplementedException();
+            Name = evt.Name;
         }
 
         public void When(Discontinued evt)
         {
-            throw new NotImplementedException();
+            Discontinued = true;
         }
 
         public void When(Suspended evt)
         {
-            throw new NotImplementedException();
+            Suspended = true;
         }
 
         public void When(StockReceived evt)
         {
-            throw new NotImplementedException();
+            QuantityOnHand += evt.Quantity;
         }
 
         public void When(StockBookedOut evt)

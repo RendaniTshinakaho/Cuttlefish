@@ -63,6 +63,45 @@ namespace Cuttlefish.ExampleApp.Domain
             Assert.That(product.ItemCode, Is.EqualTo(_itemcode));
             Assert.That(product.Name, Is.EqualTo(_productName));
             Assert.That(product.Description, Is.EqualTo(_description));
+            Assert.That(product.Suspended, Is.False);
+            Assert.That(product.Discontinued, Is.False);
         }
+
+        [Test]
+        public void ProductCanBeRenamed()
+        {
+            const string newName = "New Name";
+            CommandRouter.ExecuteCommand(new Rename(_productId, newName));
+
+            var product = AggregateBuilder.Get<ProductAggregate>(_productId);
+            Assert.That(product.Name, Is.EqualTo(newName));
+        }
+
+        [Test]
+        public void ProductCanBeSuspended()
+        {
+            CommandRouter.ExecuteCommand(new SuspendSaleOfProduct(_productId));
+            var product = AggregateBuilder.Get<ProductAggregate>(_productId);
+            Assert.That(product.Suspended, Is.True);
+        }
+
+        [Test]
+        public void ProductCanBeDiscontinued()
+        {
+            CommandRouter.ExecuteCommand(new DiscontinueProduct(_productId));
+            var product = AggregateBuilder.Get<ProductAggregate>(_productId);
+            Assert.That(product.Discontinued, Is.True);
+        }
+
+
+        [Test]
+        public void WarehouseCanAcceptShipment()
+        {
+            const int quantity = 100;
+            CommandRouter.ExecuteCommand(new AcceptShipmentOfProduct(_productId, quantity));
+            var product = AggregateBuilder.Get<ProductAggregate>(_productId);
+            Assert.That(product.QuantityOnHand, Is.EqualTo(quantity));
+        }
+
     }
 }

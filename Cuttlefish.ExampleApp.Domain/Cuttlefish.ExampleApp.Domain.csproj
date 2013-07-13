@@ -57,6 +57,7 @@
     <Compile Include="Warehouse\WarehouseService\Events.cs" />
     <Compile Include="Warehouse\Exceptions\InvalidBarcodeException.cs" />
     <Compile Include="Warehouse\Exceptions\ProductStockingException.cs" />
+    <Compile Include="Warehouse\Exceptions\InvalidQuantityException.cs" />
     <Compile Include="Warehouse\WarehouseService\WarehouseService.cs" />
   </ItemGroup>
   <ItemGroup>

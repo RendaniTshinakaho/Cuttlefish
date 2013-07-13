@@ -18,12 +18,12 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
 
         public void On(StartStockingProduct cmd)
         {
-            if (!BarcodeLengthIsCorrect(cmd))
+            if (!BarcodeLengthIsCorrect(cmd.Barcode))
             {
                 throw new InvalidBarcodeException(cmd.Barcode);
             }
 
-            if (string.IsNullOrEmpty(cmd.Name))
+            if (!NameIsValid(cmd.Name))
             {
                 throw new ProductStockingException(cmd);
             }
@@ -34,12 +34,27 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
 
         public void On(Rename cmd)
         {
-            throw new NotImplementedException();
+            if (!NameIsValid(cmd.Name))
+            {
+                throw new ProductStockingException(cmd);
+            }
+
+            new ProductAggregate().FireEvent(new Renamed(cmd.AggregateIdentity, cmd.Name));
         }
 
         public void On(AcceptShipmentOfProduct cmd)
         {
-            throw new NotImplementedException();
+            if (!IsValidQuantity(cmd.Quantity))
+            {
+                throw new InvalidQuantityException();
+            }
+
+            new ProductAggregate().FireEvent(new StockReceived(cmd.AggregateIdentity, cmd.Quantity));
+        }
+
+        private static bool IsValidQuantity(int quantity)
+        {
+            return quantity > 0;
         }
 
         public void On(BookOutStockAgainstOrder cmd)
@@ -49,20 +64,25 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
 
         public void On(SuspendSaleOfProduct cmd)
         {
-            throw new NotImplementedException();
+            new ProductAggregate().FireEvent(new Suspended(cmd.AggregateIdentity));
         }
 
         public void On(DiscontinueProduct cmd)
         {
-            throw new NotImplementedException();
+            new ProductAggregate().FireEvent(new Discontinued(cmd.AggregateIdentity));
         }
 
         #region Rules
 
-        private static bool BarcodeLengthIsCorrect(StartStockingProduct cmd)
+        private static bool BarcodeLengthIsCorrect(string barcode)
         {
             const int barcodeLength = 6;
-            return cmd.Barcode.Length == barcodeLength;
+            return barcode.Length == barcodeLength;
+        }
+
+        private static bool NameIsValid(string name)
+        {
+            return !string.IsNullOrEmpty(name);
         }
 
         #endregion
