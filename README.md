@@ -212,9 +212,9 @@ public class WarehouseService : IService
 }
 ```
 
-From the code above, we can see that services implement the IService interface, which is used to decorate the resulting class as being a service.
+From the code above, we can see that services implement the _IService_ interface, which is used to decorate the resulting class as being a service.
 
-We also see a bunch of On methods; each accepting a single command object as a parameter. These are the command handlers. Aggregates are also able to have command handlers, in cases where it makes sense to model the domain in such a manner. The role of a command handler is to establish whether a command is valid and the state of the aggregate in question permits the action which the command is trying to execute. If all goes well and the command is able to execute without failing business rule validation, an event is created to signify that an action has taken place.
+We also see a bunch of _On_ methods; each accepting a single command object as a parameter. These are the command handlers. Aggregates are also able to have command handlers, in cases where it makes sense to model the domain in such a manner. The role of a command handler is to establish whether a command is valid and the state of the aggregate in question permits the action which the command is trying to execute. If all goes well and the command is able to execute without failing business rule validation, an event is created to signify that an action has taken place.
 
 The event router is used to publish events from Services. This is done by simply calling the event router and providing an event with the required parameters and type.
 
@@ -226,9 +226,9 @@ This will cause an event to be persisted to the event store; the event to be pub
 
 The last thing we see in our service, is that there are a few methods that wrap business logic or validation logic. It is a good idea to put these into separate methods, as business logic is often re-used within an application domain.
 
-######Events
+######Events 
 
-Events are very similar to commands in that they are merely carriers of information. In the case of commands, we wish to carry intent. In the case of events, we wish to carry 'what has been done'. 
+Events are very similar to commands in that they are merely carriers of information. In the case of commands, we wish to _carry intent_. In the case of events, we wish to carry _'what has been done'_. 
 
 ```
 public class StockReceived : IEvent
@@ -256,7 +256,7 @@ public class StockReceived : IEvent
     public Guid AggregateIdentity { get; private set; }
 }
 ```
-The event above is raised when the AcceptShipmentOfProduct command is handled in our service. We could have easily put the command handler on the ProductAggregate if we wanted to, but in this case, it made more semantic sense to let the warehouse take care of accepting shipments.
+The event above is raised when the _AcceptShipmentOfProduct_ command is handled in our service. We could have easily put the command handler on the _ProductAggregate_ if we wanted to, but in this case, it made more semantic sense to let the warehouse take care of accepting shipments.
 
 The event only contains information that is required to process the fact that stock has been received. In the next section we will take a look at the way events are handled by aggregates.
 
@@ -324,9 +324,9 @@ public class ProductAggregate : AggregateBase
 }
 ```
 
-We see that the ProductAggregate inherits from AggregateBase and has a constructor which accepts a set of events. These events are effectively a history of what has happened to the product throughout its life.
+We see that the _ProductAggregate_ inherits from _AggregateBase_ and has a constructor which accepts a set of events. These events are effectively a history of what has happened to the product throughout its life.
 
-There are various When methods, which are capable of accepting individual events as parameters. Each When method acts upon the event by responding in a way that mimics what would happen in the business. For instance, we see that the Renamed event changes the name on the aggregate and the StockReceived and StockBookedOut events control the level of stock for the product.
+There are various _When_ methods, which are capable of accepting individual events as parameters. Each _When_ method acts upon the event by responding in a way that mimics what would happen in the business. For instance, we see that the _Renamed_ event changes the name on the aggregate and the _StockReceived_ and _StockBookedOut_ events control the level of stock for the product. 
 
 The reason we pass a set of events into the constructor is that the base class executes the associated When method for each event in that set to rehydrate the aggregate based on actual history. This allows us to change how the domain responds to certain events historically. The code below illustrates what the base constructor does.
 
@@ -337,7 +337,7 @@ foreach (IEvent @event in events)
 }
 ```
 
-The InvokeEvent method simply calls the required When method on the aggregate in sequence. By the time events are passed to the constructore, they are already sorted by timestamp.
+The _InvokeEvent_ method simply calls the required When method on the aggregate in sequence. By the time events are passed to the constructore, they are already sorted by timestamp.
 
 Events have version numbers attached to them, so we have the ability to change our domain logic based on different sets of events. This makes dealing with change a bit less painful. For extensive changes in the domain model, it is suggested that a migration approach be followed and that events are rewritten.
 
