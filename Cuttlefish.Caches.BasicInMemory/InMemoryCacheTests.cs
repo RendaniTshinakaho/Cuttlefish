@@ -5,6 +5,7 @@ using NUnit.Framework;
 namespace Cuttlefish.Caches.BasicInMemory
 {
     [TestFixture]
+    [Category("Integration")]
     internal class InMemoryCacheTests
     {
         [SetUp]
@@ -56,6 +57,18 @@ namespace Cuttlefish.Caches.BasicInMemory
 
             var secondItem = _dictionaryCache.Fetch<TestItem2>(testItem2.AggregateIdentity);
             Assert.That(secondItem, Is.Not.Null);
+        }
+
+        [Test]
+        public void CanSetUpInMemoryCacheUsingExtensionMethod()
+        {
+            Core.Reset();
+            Core.Configure()
+                .UseInMemoryCache()
+                .UsingNullEventStore()
+                .Done();
+
+            Assert.That(Core.Instance.UseCaching, Is.True);
         }
 
         [Test]

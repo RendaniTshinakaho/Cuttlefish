@@ -11,6 +11,7 @@ using NUnit.Framework;
 namespace Cuttlefish.ExampleApp.Domain
 {
     [TestFixture]
+    [Category("Example Application")]
     public class Tests
     {
         private Guid _productId;

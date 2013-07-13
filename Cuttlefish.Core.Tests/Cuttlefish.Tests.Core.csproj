@@ -50,7 +50,6 @@
   <ItemGroup>
     <Compile Include="AggregateBase.cs" />
     <Compile Include="Core.cs" />
-    <Compile Include="Exceptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

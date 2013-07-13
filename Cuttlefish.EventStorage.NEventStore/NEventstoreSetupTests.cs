@@ -6,6 +6,7 @@ using NUnit.Framework;
 namespace Cuttlefish.EventStorage.NEventStore
 {
     [TestFixture]
+    [Category("Integration")]
     public class NEventstoreSetupTests
     {
         [Test]

@@ -8,6 +8,7 @@ using NUnit.Framework;
 namespace Cuttlefish.Tests.Core
 {
     [TestFixture]
+    [Category("Core Tests")]
     public class AggegateBaseTests
     {
         [SetUp]

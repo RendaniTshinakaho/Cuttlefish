@@ -6,6 +6,7 @@ using NUnit.Framework;
 namespace Aitako.DSL.Tests
 {
     [TestFixture]
+    [Category("DSL")]
     public class ServiceTests
     {
         [SetUp]

@@ -8,6 +8,7 @@ using NUnit.Framework;
 namespace Cuttlefish.Storage.MongoDB
 {
     [TestFixture]
+    [Category("Integration")]
     public class MongoStorageTests
     {
         public class TestAggregate : IAggregate
