@@ -44,7 +44,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{19AA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuttlefish.ExampleApp.Domain", "Example\Cuttlefish.ExampleApp.Domain\Cuttlefish.ExampleApp.Domain.csproj", "{BEF012A9-A920-432B-90B2-F7EFFDFE4914}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aitako.DSL", "..\..\Users\Johann\Dropbox\Aitako\Internal Projects\Cuttlefish\Tools\Aitako.DSL\Aitako.DSL.csproj", "{BB60C642-2BA6-4205-A1BE-CDA6E4E73441}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aitako.DSL", "Tools\Aitako.DSL\Aitako.DSL.csproj", "{BB60C642-2BA6-4205-A1BE-CDA6E4E73441}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
