@@ -14,7 +14,7 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
         {
         }
 
-        public DateTime LastChanged { get; protected set; }
+        public DateTime LastChanged { get; private set; }
         public String ItemCode { get; private set; }
         public String Name { get; private set; }
         public String Description { get; private set; }
