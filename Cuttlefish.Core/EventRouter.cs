@@ -1,13 +1,11 @@
 ﻿using Cuttlefish.Common;
-using Cuttlefish.Common.Exceptions;
 
 namespace Cuttlefish
 {
     public class EventRouter
     {
-
         /// <summary>
-        /// Used by services to trigger events to be stored in the event store. Should be refactored.
+        ///     Used by services to trigger events to be stored in the event store. Should be refactored.
         /// </summary>
         public static void FireEventOnAggregate<T>(IEvent @event) where T : AggregateBase, new()
         {
@@ -16,7 +14,7 @@ namespace Cuttlefish
         }
 
         /// <summary>
-        /// Used by services to trigger events to be stored in the event store. Should be refactored.
+        ///     Used by services to trigger events to be stored in the event store. Should be refactored.
         /// </summary>
         public static void FireEventOnAggregate(AggregateBase aggregate, IEvent @event)
         {

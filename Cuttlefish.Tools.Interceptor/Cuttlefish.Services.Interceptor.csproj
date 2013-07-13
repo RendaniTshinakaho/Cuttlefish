@@ -7,8 +7,8 @@
     <ProjectGuid>{4F22ED07-2C3A-4A35-AB7E-5383A30F5E01}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Cuttlefish.Tools.Interceptor</RootNamespace>
-    <AssemblyName>Cuttlefish.Tools.Interceptor</AssemblyName>
+    <RootNamespace>Cuttlefish.Services.Interceptor</RootNamespace>
+    <AssemblyName>Cuttlefish.Services.Interceptor</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>

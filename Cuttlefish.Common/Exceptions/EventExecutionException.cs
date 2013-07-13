@@ -1,16 +1,16 @@
 ﻿using System;
 
-namespace Cuttlefish.Common.Exceptions
+namespace Cuttlefish.Common
 {
     public class EventExecutionException : Exception
     {
-        public object AggregateBase { get; private set; }
-        public object Event { get; private set; }
-
         public EventExecutionException(object aggregateBase, object @event)
         {
             AggregateBase = aggregateBase;
             Event = @event;
         }
+
+        public object AggregateBase { get; private set; }
+        public object Event { get; private set; }
     }
 }

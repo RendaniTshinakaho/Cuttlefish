@@ -1,6 +1,6 @@
 ﻿using Topshelf;
 
-namespace Cuttlefish.Tools.Interceptor
+namespace Cuttlefish.Services.Interceptor
 {
     internal class Program
     {

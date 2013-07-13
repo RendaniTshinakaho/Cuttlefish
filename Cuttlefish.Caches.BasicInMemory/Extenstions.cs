@@ -1,5 +1,4 @@
 ﻿using Cuttlefish.Common;
-using Cuttlefish.Common.Exceptions;
 
 namespace Cuttlefish.Caches.BasicInMemory
 {

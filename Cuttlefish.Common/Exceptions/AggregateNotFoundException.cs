@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cuttlefish.Common.Exceptions
+namespace Cuttlefish.Common
 {
     public class AggregateNotFoundException : Exception
     {

@@ -1,5 +1,4 @@
 ﻿using Cuttlefish.Common;
-using Cuttlefish.Common.Exceptions;
 using EventStore;
 using NUnit.Framework;
 

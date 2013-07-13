@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Cuttlefish.Common.Exceptions
+namespace Cuttlefish.Common
 {
     [Serializable]
     public class NoHandlerFoundException : Exception

@@ -1,6 +1,5 @@
 ﻿using System;
 using Cuttlefish.Common;
-using Cuttlefish.Common.Exceptions;
 using Cuttlefish.EventStorage.NEventStore;
 using NUnit.Framework;
 
@@ -105,7 +104,7 @@ namespace Cuttlefish.Tests.Core
         }
 
         [Test]
-        [ExpectedException(typeof(CannotResolveInstanceException))]
+        [ExpectedException(typeof (CannotResolveInstanceException))]
         public void ResolveInstanceOfUnknownTypeFailsWithException()
         {
             Cuttlefish.Core.Reset();

@@ -60,18 +60,6 @@ namespace Cuttlefish.Caches.BasicInMemory
         }
 
         [Test]
-        public void CanSetUpInMemoryCacheUsingExtensionMethod()
-        {
-            Core.Reset();
-            Core.Configure()
-                .UseInMemoryCache()
-                .UsingNullEventStore()
-                .Done();
-
-            Assert.That(Core.Instance.UseCaching, Is.True);
-        }
-
-        [Test]
         public void CanAddToCache()
         {
             var testItem = new TestItem1();
@@ -81,6 +69,18 @@ namespace Cuttlefish.Caches.BasicInMemory
             Assert.That(fetchedItem, Is.Not.Null);
             Assert.That(fetchedItem.AggregateIdentity, Is.EqualTo(testItem.AggregateIdentity));
             Assert.That(fetchedItem.TypeName, Is.EqualTo(testItem.TypeName));
+        }
+
+        [Test]
+        public void CanSetUpInMemoryCacheUsingExtensionMethod()
+        {
+            Core.Reset();
+            Core.Configure()
+                .UseInMemoryCache()
+                .UsingNullEventStore()
+                .Done();
+
+            Assert.That(Core.Instance.UseCaching, Is.True);
         }
     }
 }

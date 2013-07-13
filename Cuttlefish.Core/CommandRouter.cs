@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Cuttlefish.Common;
-using Cuttlefish.Common.Exceptions;
 using Fasterflect;
 
 namespace Cuttlefish
@@ -34,7 +33,11 @@ namespace Cuttlefish
 
             foreach (Assembly assembly in assemblies)
             {
-                IEnumerable<Type> types = assembly.Types().Where(m => m.Methods().Any(i => i.Name == CommandHandlerMethodName && i.Parameters().Count == 1));
+                IEnumerable<Type> types =
+                    assembly.Types()
+                            .Where(
+                                m =>
+                                m.Methods().Any(i => i.Name == CommandHandlerMethodName && i.Parameters().Count == 1));
 
                 foreach (Type type in types)
                 {
@@ -108,7 +111,7 @@ namespace Cuttlefish
 
         private static bool ImplementsServiceInterface(Type handlerType)
         {
-            return handlerType.GetInterfaces().Any(i => i.Name == typeof(IService).Name);
+            return handlerType.GetInterfaces().Any(i => i.Name == typeof (IService).Name);
         }
 
         private void CallCommandOnAggregate(ICommand command, AggregateBase aggregateBase)

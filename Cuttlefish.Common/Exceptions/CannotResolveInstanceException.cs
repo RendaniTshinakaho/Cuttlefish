@@ -1,10 +1,12 @@
 ﻿using System;
 
-namespace Cuttlefish.Common.Exceptions
+namespace Cuttlefish.Common
 {
     public class CannotResolveInstanceException : Exception
     {
-        public CannotResolveInstanceException(string failedToInstantiateInstanceThroughDiContainer, Exception structureMapException):base(failedToInstantiateInstanceThroughDiContainer, structureMapException)
+        public CannotResolveInstanceException(string failedToInstantiateInstanceThroughDiContainer,
+                                              Exception structureMapException)
+            : base(failedToInstantiateInstanceThroughDiContainer, structureMapException)
         {
         }
     }

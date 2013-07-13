@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Cuttlefish.Common;
-using Cuttlefish.Common.Exceptions;
 using Fasterflect;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Cuttlefish
 {
     /// <summary>
-    /// Base type which all aggregates inherit from
+    ///     Base type which all aggregates inherit from
     /// </summary>
     public abstract class AggregateBase : IAggregate
     {
         /// <summary>
-        /// true when the aggregate is being hydrated in the constructor. used to prevent events from 
-        /// being propagated to the message bus every time they are loaded.
+        ///     true when the aggregate is being hydrated in the constructor. used to prevent events from
+        ///     being propagated to the message bus every time they are loaded.
         /// </summary>
         private readonly bool _aggregateLoading;
 
@@ -24,7 +23,7 @@ namespace Cuttlefish
         private string _typeName;
 
         /// <summary>
-        /// Constructor which allows an aggregate to be hydrated from events.
+        ///     Constructor which allows an aggregate to be hydrated from events.
         /// </summary>
         /// <param name="events">List of events ordered by timestamp</param>
         protected AggregateBase(IEnumerable<IEvent> events)
@@ -48,7 +47,7 @@ namespace Cuttlefish
         }
 
         /// <summary>
-        /// The main unique aggregate identifier
+        ///     The main unique aggregate identifier
         /// </summary>
         [BsonId]
         public Guid AggregateIdentity { get; set; }
@@ -74,7 +73,7 @@ namespace Cuttlefish
 
             if (eventHandlerMethod != null)
             {
-                eventHandlerMethod.Invoke(instance, new object[] { @event });
+                eventHandlerMethod.Invoke(instance, new object[] {@event});
 
                 if (!_aggregateLoading)
                 {

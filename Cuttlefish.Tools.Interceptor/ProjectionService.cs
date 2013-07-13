@@ -4,7 +4,7 @@ using MassTransit;
 using StructureMap;
 using Topshelf;
 
-namespace Cuttlefish.Tools.Interceptor
+namespace Cuttlefish.Services.Interceptor
 {
     public class ProjectionService : ServiceControl
     {

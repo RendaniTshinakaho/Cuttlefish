@@ -28,7 +28,10 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
                 throw new ProductStockingException(cmd);
             }
 
-            EventRouter.FireEventOnAggregate<ProductAggregate>(new NewProductAddedToWarehouse(cmd.AggregateIdentity, cmd.ItemCode, cmd.Name, cmd.Description, cmd.Barcode));
+            EventRouter.FireEventOnAggregate<ProductAggregate>(new NewProductAddedToWarehouse(cmd.AggregateIdentity,
+                                                                                              cmd.ItemCode, cmd.Name,
+                                                                                              cmd.Description,
+                                                                                              cmd.Barcode));
         }
 
 

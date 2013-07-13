@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Cuttlefish.Common;
-using Cuttlefish.Common.Exceptions;
 using Cuttlefish.EventStorage.NEventStore;
 using NUnit.Framework;
 
