@@ -1,5 +1,5 @@
  
-A friendly and easy to use [CQRS](http://abdullin.com/cqrs) framework with a fluid configuration interface which wires up some commonly used components common in a CQRS implementation using event sourcing. 
+A friendly and easy to use framework based on [CQRS](http://abdullin.com/cqrs) principles with a fluid configuration interface which wires up some commonly used components common in a CQRS implementation using event sourcing. It includes a simple and fluid tool for defining aggregates, events, services and commands which generates the skeleton code required for all of these items, saving time and achieving consistency.
 
 The framework uses [MassTransit](http://masstransit-project.com/) as a message bus wrapper, which means that you could use either [RabbitMQ](http://rabbitmq.com) or [MSMQ](http://en.wikipedia.org/wiki/Microsoft_Message_Queuing) as an event queue. 
 Events are persisted through the excellent [NEventStore](http://neventstore.org) library which has support for a wide range of databases including [MongoDB](http://www.mongodb.org), [RavenDB](http://ravendb.net) and various flavours of SQL.
