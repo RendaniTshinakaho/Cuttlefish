@@ -346,6 +346,12 @@ The _InvokeEvent_ method simply calls the required When method on the aggregate 
 
 Events have version numbers attached to them, so we have the ability to change our domain logic based on different sets of events. This makes dealing with change a bit less painful. For extensive changes in the domain model, it is suggested that a migration approach be followed and that events are rewritten.
 
+That's cool and stuff, but how the hell do I get hold of an aggregate once I've created it?
+```
+var product = AggregateBuilder.Get<ProductAggregate>(_productId);
+```
+Aggregates have GUIDs for unique identifiers. The AggregateBuilder.Get method builds an aggregate from its events that are fetched from the event store based on its unique key.
+
 #####DSL
 _coming soon_
 #####Interceptor
