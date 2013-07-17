@@ -46,6 +46,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuttlefish.ExampleApp.Domai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aitako.DSL", "Tools\Aitako.DSL\Aitako.DSL.csproj", "{BB60C642-2BA6-4205-A1BE-CDA6E4E73441}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cuttlefish.ExampleApp.UI.Web", "Example\Cuttlefish.ExampleApp.UI.Web\Cuttlefish.ExampleApp.UI.Web.csproj", "{09149074-BAB9-4EB6-95CC-CDD710F2B1EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,6 +102,10 @@ Global
 		{BB60C642-2BA6-4205-A1BE-CDA6E4E73441}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB60C642-2BA6-4205-A1BE-CDA6E4E73441}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB60C642-2BA6-4205-A1BE-CDA6E4E73441}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09149074-BAB9-4EB6-95CC-CDD710F2B1EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09149074-BAB9-4EB6-95CC-CDD710F2B1EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09149074-BAB9-4EB6-95CC-CDD710F2B1EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09149074-BAB9-4EB6-95CC-CDD710F2B1EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -115,5 +121,6 @@ Global
 		{333A6E5E-892F-4BA9-9B95-2389F419878F} = {765A20B4-50FC-49F2-A63B-3F6C832CC3DD}
 		{3175C859-DB89-415F-A1FE-F5A135957864} = {D5CC4E3D-F2F2-40DC-B79B-423944F4BE31}
 		{BEF012A9-A920-432B-90B2-F7EFFDFE4914} = {19AA4B60-53E4-46FB-975C-065E775B07A8}
+		{09149074-BAB9-4EB6-95CC-CDD710F2B1EC} = {19AA4B60-53E4-46FB-975C-065E775B07A8}
 	EndGlobalSection
 EndGlobal
