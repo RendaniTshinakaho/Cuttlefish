@@ -6,6 +6,9 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Cuttlefish.AggregatePublishers.MassTransit;
+using Cuttlefish.EventStorage.NEventStore;
+using MassTransit;
 
 namespace Cuttlefish.ExampleApp.UI.Web
 {
@@ -22,6 +25,16 @@ namespace Cuttlefish.ExampleApp.UI.Web
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            Core.Reset();
+            Core.Instance
+                .WithDomainNamespaceRoot("Cuttlefish.ExampleApp.Domain")
+                .UseInMemoryEventStore()
+                .UseMassTransitAggregateUpdatePublisher(ServiceBusFactory.New(sbc =>
+                {
+                    sbc.ReceiveFrom("rabbitmq://localhost/aggregates");
+                }))
+                .Done();
         }
     }
 }

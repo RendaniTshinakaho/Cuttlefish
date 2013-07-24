@@ -6,7 +6,7 @@ using Topshelf;
 
 namespace Cuttlefish.Services.Interceptor
 {
-    public class ProjectionService : ServiceControl
+    public class EventInterceptionService : ServiceControl
     {
         private IServiceBus _Bus;
 

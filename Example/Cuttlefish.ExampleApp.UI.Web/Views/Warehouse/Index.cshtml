@@ -1,0 +1,91 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+
+
+<div class="container">
+    <div class="row">
+        <div>
+            <h2>Warehouse</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <form class="form-horizontal" id="frmMain">
+                <fieldset>
+
+                    <!-- Form Name -->
+                    <legend>Start stocking product</legend>
+
+                    <!-- Text input-->
+                    <div class="control-group">
+                        <label class="control-label" for="itemCode">Item Code</label>
+                        <div class="controls">
+                            <input id="itemCode" name="itemCode" type="text" placeholder="G123-4" class="input-large" required="">
+                        </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="control-group">
+                        <label class="control-label" for="name">Product Name</label>
+                        <div class="controls">
+                            <input id="name" name="name" type="text" placeholder="Widget XYZ" class="input-large" required="">
+                        </div>
+                    </div>
+
+                    <!-- Textarea -->
+                    <div class="control-group">
+                        <label class="control-label" for="description">Description</label>
+                        <div class="controls">
+                            <textarea id="description" name="description"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="control-group">
+                        <label class="control-label" for="barcode">Barcode</label>
+                        <div class="controls">
+                            <input id="barcode" name="barcode" type="text" placeholder="2654598879351987" class="input-large" required="">
+                        </div>
+                    </div>
+
+                    <!-- Button (Double) -->
+                    <div class="control-group">
+                        <label class="control-label" for="btnSubmit"></label>
+                        <div class="controls">
+                            <button id="btnSubmit" name="btnSubmit" class="btn btn-success">Start stocking product</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+            <div class="alert alert-success" id="alert-success">
+                Your request has been sent for processing.
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    
+    <script>
+        $().ready(function () {
+            
+            $("#alert-success").hide();
+
+            $("#btnSubmit").click(function (evt) {
+
+                evt.preventDefault();
+                
+                var values = $("#frmMain").serialize();
+
+                $.post("Warehouse/StartStockingProduct", values);
+                $("#alert-success").fadeIn(2000, function() {
+                    $("#alert-success").fadeOut(1500);
+                });
+            });
+        });
+    </script>
+}
