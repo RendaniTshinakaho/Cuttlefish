@@ -3,7 +3,7 @@ using Cuttlefish.Common;
 
 namespace Cuttlefish.ExampleApp.Domain.Warehouse
 {
-    public class ProductStockingException : Exception
+    public class ProductStockingException : Exception, IDomainException
     {
         public ProductStockingException(ICommand cmd)
         {
@@ -11,5 +11,10 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
         }
 
         public ICommand OriginalCommand { get; private set; }
+    }
+
+    public interface IDomainException
+    {
+
     }
 }

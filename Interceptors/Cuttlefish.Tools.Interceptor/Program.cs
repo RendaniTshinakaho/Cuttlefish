@@ -8,9 +8,9 @@ namespace Cuttlefish.Services.Interceptor
         {
             return (int) HostFactory.Run(x =>
                 {
-                    x.Service<ProjectionService>(s =>
+                    x.Service<EventInterceptionService>(s =>
                         {
-                            s.ConstructUsing(name => new ProjectionService());
+                            s.ConstructUsing(name => new EventInterceptionService());
                             s.WhenStarted((helper, control) => helper.Start(control));
                             s.WhenStopped((helper, control) => helper.Start(control));
                         });

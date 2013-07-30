@@ -44,7 +44,7 @@ namespace Cuttlefish.Tests.Core
         }
 
         [Test]
-        [ExpectedException(typeof (NoHandlerFoundException))]
+        [ExpectedException(typeof(NoHandlerFoundException))]
         public void CommandNotFoundThrowsException()
         {
             CommandRouter.ExecuteCommand(new MyUnhandledCommand());
@@ -62,6 +62,7 @@ namespace Cuttlefish.Tests.Core
             var aggregate = AggregateBuilder.Get<TestAggregate>(id);
             Assert.That(aggregate.Count, Is.EqualTo(0));
         }
+
     }
 
     public class MyUnhandledCommand : ICommand
@@ -73,6 +74,7 @@ namespace Cuttlefish.Tests.Core
     public class TestAggregate : AggregateBase
     {
         public int Count;
+        public bool HandledException;
 
         public TestAggregate()
             : base(new List<IEvent>())
