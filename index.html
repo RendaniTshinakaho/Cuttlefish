@@ -1,0 +1,427 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Cuttlefish by johannds</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Cuttlefish</h1>
+        <p>A friendly and easy to use CQRS framework with a fluid configuration interface which attempts to wire up some commonly used components to make up a nifty little CQRS architecture using event sourcing.</p>
+
+        <p class="view"><a href="https://github.com/johannds/Cuttlefish">View the Project on GitHub <small>johannds/Cuttlefish</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/johannds/Cuttlefish/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/johannds/Cuttlefish/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/johannds/Cuttlefish">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p>A friendly and easy to use framework based on <a href="http://abdullin.com/cqrs">CQRS</a> principles with a fluid configuration interface which wires up some commonly used components common in a CQRS implementation using event sourcing. It includes a simple and fluid tool for defining aggregates, events, services and commands which generates the skeleton code required for all of these items, saving time and achieving consistency.</p>
+
+<p>The framework uses <a href="http://masstransit-project.com/">MassTransit</a> as a message bus wrapper, which means that you could use either <a href="http://rabbitmq.com">RabbitMQ</a> or <a href="http://en.wikipedia.org/wiki/Microsoft_Message_Queuing">MSMQ</a> as an event queue. 
+Events are persisted through the excellent <a href="http://neventstore.org">NEventStore</a> library which has support for a wide range of databases including <a href="http://www.mongodb.org">MongoDB</a>, <a href="http://ravendb.net">RavenDB</a> and various flavours of SQL.</p>
+
+<p>A basic and functional example of a domain built with the framework is included under the Cuttlefish.ExampleApp.Domain folder. It illustrates the use of commands, aggregates, services and events in the context of the Cuttlefish framework.</p>
+
+<h5>
+<a name="quick-setup" class="anchor" href="#quick-setup"><span class="octicon octicon-link"></span></a>Quick Setup</h5>
+
+<p>Getting the framework up and running is super easy. Assuming that we are using RabbitMQ with a MongoDB event store backing, we would set up the framework as follows:</p>
+
+<div class="highlight"><pre><span class="c1">// Starts up the configuration interface</span>
+<span class="n">Core</span><span class="p">.</span><span class="n">Configure</span><span class="p">()</span>
+
+    <span class="c1">// Specify which root namespace reflection should use for finding aggregates, </span>
+    <span class="c1">// events and commands.</span>
+    <span class="p">.</span><span class="n">WithDomainNamespaceRoot</span><span class="p">(</span><span class="s">"MyCompany.MyApp.Domain"</span><span class="p">)</span>
+
+    <span class="c1">// For testing and extension purposes only at present, specifies which in-memory cache to </span>
+    <span class="c1">// use for storing the latest aggregate state</span>
+    <span class="p">.</span><span class="n">UseInMemoryCache</span><span class="p">()</span>
+
+    <span class="c1">// Configures NEventStore, more info available on https://github.com/NEventStore/NEventStore</span>
+    <span class="p">.</span><span class="n">UseNEventStore</span><span class="p">(</span><span class="n">Wireup</span><span class="p">.</span><span class="n">Init</span><span class="p">()</span>
+        <span class="p">.</span><span class="n">UsingMongoPersistence</span><span class="p">(</span><span class="s">"eventstore"</span><span class="p">,</span> <span class="k">new</span> <span class="n">DocumentObjectSerializer</span><span class="p">())</span>
+            <span class="p">.</span><span class="n">Build</span><span class="p">())</span>
+
+    <span class="c1">// Configures the aggregate update publisher, which will push entire aggregates to the </span>
+    <span class="c1">// message queue for consumption by Interceptors later.</span>
+    <span class="p">.</span><span class="n">UseMassTransitAggregateUpdatePublisher</span><span class="p">(</span><span class="n">ServiceBusFactory</span><span class="p">.</span><span class="n">New</span><span class="p">(</span><span class="n">sbc</span> <span class="p">=&gt;</span>
+    <span class="p">{</span>
+        <span class="n">sbc</span><span class="p">.</span><span class="n">ReceiveFrom</span><span class="p">(</span><span class="s">"rabbitmq://localhost/aggregate_updates"</span><span class="p">);</span>
+    <span class="p">}))</span>
+
+    <span class="c1">// Wires everything up for us.</span>
+    <span class="p">.</span><span class="n">Done</span><span class="p">();</span>
+</pre></div>
+
+<p>This will wire up all the components required by the framework.  Out of the box, you get:</p>
+
+<ul>
+<li>integration with RabbitMQ through MassTransit</li>
+<li>integration with NEventStore using any of the supported persistence adapters. (Mongo, Raven, MS/MySQL)</li>
+<li>a very basic low-volume in-memory aggregate cache (for testing and small projects)</li>
+<li>a mongo aggregate cache which saves the latest version of each aggregate to disc using MongoDB</li>
+<li>dependency injection using StructureMap</li>
+</ul><h3>
+<a name="future-plans" class="anchor" href="#future-plans"><span class="octicon octicon-link"></span></a>Future Plans</h3>
+
+<p>The framework is easy to extend and there are plans in the pipeline to support the following features:</p>
+
+<ul>
+<li>  Distributed command handler</li>
+<li>  Auto-generated SignalR endpoints for decorated aggregate events</li>
+<li>  Auto-generated ASP.NET MVC controller endpoints for calling domain commands</li>
+<li>  The ability to run an in-memory environment for prototyping purposes based purely on the domain specification file. (long term goal)</li>
+</ul><h3>
+<a name="the-framework-consists-of-the-following-core-components" class="anchor" href="#the-framework-consists-of-the-following-core-components"><span class="octicon octicon-link"></span></a>The framework consists of the following core components:</h3>
+
+<h5>
+<a name="core" class="anchor" href="#core"><span class="octicon octicon-link"></span></a>Core</h5>
+
+<p>The core provides the most basic functionality as well as base classes and interfaces for defining aggregates, services, commands and events. </p>
+
+<p>The 4 things you'll need to work with to start setting up your domain are commands, events, services and aggregates.</p>
+
+<h6>
+<a name="commands" class="anchor" href="#commands"><span class="octicon octicon-link"></span></a>Commands</h6>
+
+<p>We'll start with commands. They tell our domain what to do. They can be defined by implementing the ICommand interface as below. Commands are handled by either aggregates or services, but we'll get to how that works in a bit.</p>
+
+<div class="highlight"><pre><span class="k">public</span> <span class="k">class</span> <span class="nc">StartStockingProduct</span> <span class="p">:</span> <span class="n">ICommand</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="kt">int</span> <span class="n">_version</span><span class="p">;</span>
+
+    <span class="k">private</span> <span class="nf">StartStockingProduct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">_version</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="nf">StartStockingProduct</span><span class="p">(</span><span class="n">Guid</span> <span class="n">aggregateidentity</span><span class="p">,</span> <span class="n">String</span> <span class="n">itemcode</span><span class="p">,</span> <span class="n">String</span> <span class="n">name</span><span class="p">,</span> 
+                                <span class="n">String</span> <span class="n">description</span><span class="p">,</span> <span class="n">String</span> <span class="n">barcode</span><span class="p">)</span> <span class="p">:</span> <span class="k">this</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">AggregateIdentity</span> <span class="p">=</span> <span class="n">aggregateidentity</span><span class="p">;</span>
+        <span class="n">ItemCode</span> <span class="p">=</span> <span class="n">itemcode</span><span class="p">;</span>
+        <span class="n">Name</span> <span class="p">=</span> <span class="n">name</span><span class="p">;</span>
+        <span class="n">Description</span> <span class="p">=</span> <span class="n">description</span><span class="p">;</span>
+        <span class="n">Barcode</span> <span class="p">=</span> <span class="n">barcode</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">String</span> <span class="n">ItemCode</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">String</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">String</span> <span class="n">Description</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">String</span> <span class="n">Barcode</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">Version</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_version</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">Guid</span> <span class="n">AggregateIdentity</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>In the example above, we are creating a command which tells the warehouse service to start stocking a certain product. The command conveys information that would be required by the domain to perform the action the command triggers.</p>
+
+<p>To execute commands against domain services or aggregates, we make use of the CommandRouter. The router is clever enough to know which service or aggregate should react to the command. Only a single handler may be registered to handle commands. The code below illustrates how we would execute a command through the router.</p>
+
+<div class="highlight"><pre><span class="n">_productName</span> <span class="p">=</span> <span class="s">"Widget X"</span><span class="p">;</span>
+<span class="n">_description</span> <span class="p">=</span> <span class="s">"blah blah blah"</span><span class="p">;</span>
+<span class="n">_itemcode</span> <span class="p">=</span> <span class="s">"X0001"</span><span class="p">;</span>
+<span class="n">_barcode</span> <span class="p">=</span> <span class="s">"123456"</span><span class="p">;</span>
+
+<span class="kt">var</span> <span class="n">newProductCommand</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StartStockingProduct</span><span class="p">(</span><span class="n">Guid</span><span class="p">.</span><span class="n">NewGuid</span><span class="p">(),</span> <span class="n">_itemcode</span><span class="p">,</span> 
+    <span class="n">_productName</span><span class="p">,</span> <span class="n">_description</span><span class="p">,</span> <span class="n">_barcode</span><span class="p">);</span>
+
+<span class="n">CommandRouter</span><span class="p">.</span><span class="n">ExecuteCommand</span><span class="p">(</span><span class="n">newProductCommand</span><span class="p">);</span>
+</pre></div>
+
+<p>In the example above, the command router knows which handler the command should be routed to. The service or aggregate would then respond by persisting an event of what has been executed to the eventstore. More on that later...</p>
+
+<h6>
+<a name="services" class="anchor" href="#services"><span class="octicon octicon-link"></span></a>Services</h6>
+
+<p>What do these aggregates and services look like? You might ask. Well, here is an example of a service which models the way a warehouse might work in an over-simplified business scenario.</p>
+
+<div class="highlight"><pre><span class="k">public</span> <span class="k">class</span> <span class="nc">WarehouseService</span> <span class="p">:</span> <span class="n">IService</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">On</span><span class="p">(</span><span class="n">StartStockingProduct</span> <span class="n">cmd</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="n">BarcodeLengthIsCorrect</span><span class="p">(</span><span class="n">cmd</span><span class="p">.</span><span class="n">Barcode</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">InvalidBarcodeException</span><span class="p">(</span><span class="n">cmd</span><span class="p">.</span><span class="n">Barcode</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(!</span><span class="n">NameIsValid</span><span class="p">(</span><span class="n">cmd</span><span class="p">.</span><span class="n">Name</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">ProductStockingException</span><span class="p">(</span><span class="n">cmd</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">EventRouter</span><span class="p">.</span><span class="n">FireEventOnAggregate</span><span class="p">&lt;</span><span class="n">ProductAggregate</span><span class="p">&gt;(</span>
+            <span class="k">new</span> <span class="nf">NewProductAddedToWarehouse</span><span class="p">(</span><span class="n">cmd</span><span class="p">.</span><span class="n">AggregateIdentity</span><span class="p">,</span>
+                                                  <span class="n">cmd</span><span class="p">.</span><span class="n">ItemCode</span><span class="p">,</span> <span class="n">cmd</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span>
+                                                  <span class="n">cmd</span><span class="p">.</span><span class="n">Description</span><span class="p">,</span>
+                                                  <span class="n">cmd</span><span class="p">.</span><span class="n">Barcode</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">On</span><span class="p">(</span><span class="n">Rename</span> <span class="n">cmd</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="n">NameIsValid</span><span class="p">(</span><span class="n">cmd</span><span class="p">.</span><span class="n">Name</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">ProductStockingException</span><span class="p">(</span><span class="n">cmd</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="n">EventRouter</span><span class="p">.</span><span class="n">FireEventOnAggregate</span><span class="p">&lt;</span><span class="n">ProductAggregate</span><span class="p">&gt;(</span><span class="k">new</span> <span class="n">Renamed</span><span class="p">(</span><span class="n">cmd</span><span class="p">.</span><span class="n">AggregateIdentity</span><span class="p">,</span> 
+            <span class="n">cmd</span><span class="p">.</span><span class="n">Name</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">On</span><span class="p">(</span><span class="n">AcceptShipmentOfProduct</span> <span class="n">cmd</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="n">IsValidQuantity</span><span class="p">(</span><span class="n">cmd</span><span class="p">.</span><span class="n">Quantity</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">InvalidQuantityException</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="n">EventRouter</span><span class="p">.</span><span class="n">FireEventOnAggregate</span><span class="p">&lt;</span><span class="n">ProductAggregate</span><span class="p">&gt;(</span><span class="k">new</span> <span class="n">StockReceived</span><span class="p">(</span><span class="n">cmd</span><span class="p">.</span><span class="n">AggregateIdentity</span><span class="p">,</span> 
+            <span class="n">cmd</span><span class="p">.</span><span class="n">Quantity</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">On</span><span class="p">(</span><span class="n">BookOutStockAgainstOrder</span> <span class="n">cmd</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="n">IsValidQuantity</span><span class="p">(</span><span class="n">cmd</span><span class="p">.</span><span class="n">Quantity</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">InvalidQuantityException</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(!</span><span class="n">ItemIsInStockForQuantityRequired</span><span class="p">(</span><span class="n">cmd</span><span class="p">.</span><span class="n">AggregateIdentity</span><span class="p">,</span> <span class="n">cmd</span><span class="p">.</span><span class="n">Quantity</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">OutOfStockException</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="n">EventRouter</span><span class="p">.</span><span class="n">FireEventOnAggregate</span><span class="p">&lt;</span><span class="n">ProductAggregate</span><span class="p">&gt;(</span><span class="k">new</span> <span class="n">StockBookedOut</span><span class="p">(</span><span class="n">cmd</span><span class="p">.</span><span class="n">AggregateIdentity</span><span class="p">,</span> 
+            <span class="n">cmd</span><span class="p">.</span><span class="n">Quantity</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">On</span><span class="p">(</span><span class="n">SuspendSaleOfProduct</span> <span class="n">cmd</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">EventRouter</span><span class="p">.</span><span class="n">FireEventOnAggregate</span><span class="p">&lt;</span><span class="n">ProductAggregate</span><span class="p">&gt;(</span><span class="k">new</span> <span class="n">Suspended</span><span class="p">(</span><span class="n">cmd</span><span class="p">.</span><span class="n">AggregateIdentity</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">On</span><span class="p">(</span><span class="n">DiscontinueProduct</span> <span class="n">cmd</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">EventRouter</span><span class="p">.</span><span class="n">FireEventOnAggregate</span><span class="p">&lt;</span><span class="n">ProductAggregate</span><span class="p">&gt;(</span><span class="k">new</span> <span class="n">Discontinued</span><span class="p">(</span><span class="n">cmd</span><span class="p">.</span><span class="n">AggregateIdentity</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="cp">#region Validation Rules</span>
+
+    <span class="k">private</span> <span class="k">static</span> <span class="kt">bool</span> <span class="nf">ItemIsInStockForQuantityRequired</span><span class="p">(</span><span class="n">Guid</span> <span class="n">aggregateIdentity</span><span class="p">,</span> <span class="kt">int</span> <span class="n">quantityRequired</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">product</span> <span class="p">=</span> <span class="n">AggregateBuilder</span><span class="p">.</span><span class="n">Get</span><span class="p">&lt;</span><span class="n">ProductAggregate</span><span class="p">&gt;(</span><span class="n">aggregateIdentity</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">product</span><span class="p">.</span><span class="n">QuantityOnHand</span> <span class="p">&gt;=</span> <span class="n">quantityRequired</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="k">static</span> <span class="kt">bool</span> <span class="nf">BarcodeLengthIsCorrect</span><span class="p">(</span><span class="kt">string</span> <span class="n">barcode</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">const</span> <span class="kt">int</span> <span class="n">barcodeLength</span> <span class="p">=</span> <span class="m">6</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">barcode</span><span class="p">.</span><span class="n">Length</span> <span class="p">==</span> <span class="n">barcodeLength</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="k">static</span> <span class="kt">bool</span> <span class="nf">NameIsValid</span><span class="p">(</span><span class="kt">string</span> <span class="n">name</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="p">!</span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="k">static</span> <span class="kt">bool</span> <span class="nf">IsValidQuantity</span><span class="p">(</span><span class="kt">int</span> <span class="n">quantity</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">quantity</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="cp">#endregion</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>From the code above, we can see that services implement the <em>IService</em> interface, which is used to decorate the resulting class as being a service.</p>
+
+<p>We also see a bunch of <em>On</em> methods; each accepting a single command object as a parameter. These are the command handlers. Aggregates are also able to have command handlers, in cases where it makes sense to model the domain in such a manner. The role of a command handler is to establish whether a command is valid and the state of the aggregate in question permits the action which the command is trying to execute. If all goes well and the command is able to execute without failing business rule validation, an event is created to signify that an action has taken place.</p>
+
+<p>The event router is used to publish events from Services. This is done by simply calling the event router and providing an event with the required parameters and type.</p>
+
+<div class="highlight"><pre><span class="n">EventRouter</span><span class="p">.</span><span class="n">FireEventOnAggregate</span><span class="p">&lt;</span><span class="n">ProductAggregate</span><span class="p">&gt;(</span><span class="k">new</span> <span class="n">Discontinued</span><span class="p">(</span><span class="n">cmd</span><span class="p">.</span><span class="n">AggregateIdentity</span><span class="p">));</span>
+</pre></div>
+
+<p>This will cause an event to be persisted to the event store; the event to be published to the messagebus (if specified in the core setup); and if enabled, it will also cause the latest version of the aggregate which responds to the event (if any) to be published to the specified cache.</p>
+
+<p>The last thing we see in our service, is that there are a few methods that wrap business logic or validation logic. It is a good idea to put these into separate methods, as business logic is often re-used within an application domain.</p>
+
+<h6>
+<a name="events" class="anchor" href="#events"><span class="octicon octicon-link"></span></a>Events</h6>
+
+<p>Events are very similar to commands in that they are merely carriers of information. In the case of commands, we wish to <em>carry intent</em>. In the case of events, we wish to carry <em>'what has been done'</em>. </p>
+
+<div class="highlight"><pre><span class="k">public</span> <span class="k">class</span> <span class="nc">StockReceived</span> <span class="p">:</span> <span class="n">IEvent</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="kt">int</span> <span class="n">_version</span><span class="p">;</span>
+
+    <span class="k">private</span> <span class="nf">StockReceived</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">_version</span> <span class="p">=</span> <span class="m">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="nf">StockReceived</span><span class="p">(</span><span class="n">Guid</span> <span class="n">aggregateidentity</span><span class="p">,</span> <span class="n">Int32</span> <span class="n">quantity</span><span class="p">)</span> <span class="p">:</span> <span class="k">this</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">AggregateIdentity</span> <span class="p">=</span> <span class="n">aggregateidentity</span><span class="p">;</span>
+        <span class="n">Quantity</span> <span class="p">=</span> <span class="n">quantity</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">Int32</span> <span class="n">Quantity</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">int</span> <span class="n">Version</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_version</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">Guid</span> <span class="n">AggregateIdentity</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>The event above is raised when the <em>AcceptShipmentOfProduct</em> command is handled in our service. We could have easily put the command handler on the <em>ProductAggregate</em> if we wanted to, but in this case, it made more semantic sense to let the warehouse take care of accepting shipments.</p>
+
+<p>The event only contains information that is required to process the fact that stock has been received. In the next section we will take a look at the way events are handled by aggregates.</p>
+
+<h6>
+<a name="aggregates" class="anchor" href="#aggregates"><span class="octicon octicon-link"></span></a>Aggregates</h6>
+
+<p>Aggregates are the meat of our domain. They are generally models of real-world items or documents and should be rich and extensive. In the example below, we are modeling a product from a warehouse perspective. The warehouse doesn't care about pricing information, as its main area of concern is stock levels and maintaining a catalogue.</p>
+
+<div class="highlight"><pre><span class="k">public</span> <span class="k">class</span> <span class="nc">ProductAggregate</span> <span class="p">:</span> <span class="n">AggregateBase</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nf">ProductAggregate</span><span class="p">()</span> <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">IEvent</span><span class="p">&gt;())</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="nf">ProductAggregate</span><span class="p">(</span><span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">IEvent</span><span class="p">&gt;</span> <span class="n">events</span><span class="p">)</span> <span class="p">:</span> <span class="k">base</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">DateTime</span> <span class="n">LastChanged</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">String</span> <span class="n">ItemCode</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">String</span> <span class="n">Name</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">String</span> <span class="n">Description</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">String</span> <span class="n">Barcode</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">Boolean</span> <span class="n">Suspended</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">Boolean</span> <span class="n">Discontinued</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="n">Int32</span> <span class="n">QuantityOnHand</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">private</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">When</span><span class="p">(</span><span class="n">NewProductAddedToWarehouse</span> <span class="n">evt</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">AggregateIdentity</span> <span class="p">=</span> <span class="n">evt</span><span class="p">.</span><span class="n">AggregateIdentity</span><span class="p">;</span>
+        <span class="n">Barcode</span> <span class="p">=</span> <span class="n">evt</span><span class="p">.</span><span class="n">Barcode</span><span class="p">;</span>
+        <span class="n">Name</span> <span class="p">=</span> <span class="n">evt</span><span class="p">.</span><span class="n">Name</span><span class="p">;</span>
+        <span class="n">Description</span> <span class="p">=</span> <span class="n">evt</span><span class="p">.</span><span class="n">Description</span><span class="p">;</span>
+        <span class="n">Discontinued</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+        <span class="n">Suspended</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+        <span class="n">ItemCode</span> <span class="p">=</span> <span class="n">evt</span><span class="p">.</span><span class="n">ItemCode</span><span class="p">;</span>
+        <span class="n">LastChanged</span> <span class="p">=</span> <span class="n">evt</span><span class="p">.</span><span class="n">Timestamp</span><span class="p">;</span>
+        <span class="n">QuantityOnHand</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">When</span><span class="p">(</span><span class="n">Renamed</span> <span class="n">evt</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Name</span> <span class="p">=</span> <span class="n">evt</span><span class="p">.</span><span class="n">Name</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">When</span><span class="p">(</span><span class="n">Discontinued</span> <span class="n">evt</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Discontinued</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">When</span><span class="p">(</span><span class="n">Suspended</span> <span class="n">evt</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Suspended</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">When</span><span class="p">(</span><span class="n">StockReceived</span> <span class="n">evt</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">QuantityOnHand</span> <span class="p">+=</span> <span class="n">evt</span><span class="p">.</span><span class="n">Quantity</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">When</span><span class="p">(</span><span class="n">StockBookedOut</span> <span class="n">evt</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">QuantityOnHand</span> <span class="p">-=</span> <span class="n">evt</span><span class="p">.</span><span class="n">Quantity</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>We see that the <em>ProductAggregate</em> inherits from <em>AggregateBase</em> and has a constructor which accepts a set of events. These events are effectively a history of what has happened to the product throughout its life.</p>
+
+<p>There are various <em>When</em> methods, which are capable of accepting individual events as parameters. Each <em>When</em> method acts upon the event by responding in a way that mimics what would happen in the business. For instance, we see that the <em>Renamed</em> event changes the name on the aggregate and the <em>StockReceived</em> and <em>StockBookedOut</em> events control the level of stock for the product. </p>
+
+<p>The reason we pass a set of events into the constructor is that the base class executes the associated When method for each event in that set to rehydrate the aggregate based on actual history. This allows us to change how the domain responds to certain events historically. The code below illustrates what the base constructor does.</p>
+
+<div class="highlight"><pre><span class="k">foreach</span> <span class="p">(</span><span class="n">IEvent</span> <span class="n">@event</span> <span class="k">in</span> <span class="n">events</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">InvokeEvent</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">@event</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>The <em>InvokeEvent</em> method simply calls the required When method on the aggregate in sequence. By the time events are passed to the constructore, they are already sorted by timestamp.</p>
+
+<p>Events have version numbers attached to them, so we have the ability to change our domain logic based on different sets of events. This makes dealing with change a bit less painful. For extensive changes in the domain model, it is suggested that a migration approach be followed and that events are rewritten.</p>
+
+<p>That's cool and stuff, but how the hell do I get hold of an aggregate once I've created it?</p>
+
+<div class="highlight"><pre><span class="kt">var</span> <span class="n">product</span> <span class="p">=</span> <span class="n">AggregateBuilder</span><span class="p">.</span><span class="n">Get</span><span class="p">&lt;</span><span class="n">ProductAggregate</span><span class="p">&gt;(</span><span class="n">_productId</span><span class="p">);</span>
+</pre></div>
+
+<p>Aggregates have GUIDs for unique identifiers. The AggregateBuilder.Get method builds an aggregate from its events that are fetched from the event store based on its unique key.</p>
+
+<h5>
+<a name="dsl" class="anchor" href="#dsl"><span class="octicon octicon-link"></span></a>DSL</h5>
+
+<p><em>coming soon</em></p>
+
+<h5>
+<a name="interceptor" class="anchor" href="#interceptor"><span class="octicon octicon-link"></span></a>Interceptor</h5>
+
+<p><em>coming soon</em></p>
+
+<h5>
+<a name="aggregate-update-publisher-extension" class="anchor" href="#aggregate-update-publisher-extension"><span class="octicon octicon-link"></span></a>Aggregate Update Publisher Extension</h5>
+
+<p><em>coming soon</em></p>
+
+<h5>
+<a name="mongodb-storage-extension" class="anchor" href="#mongodb-storage-extension"><span class="octicon octicon-link"></span></a>MongoDB Storage Extension</h5>
+
+<p><em>coming soon</em></p>
+
+<h5>
+<a name="neventstore-extension" class="anchor" href="#neventstore-extension"><span class="octicon octicon-link"></span></a>NEventStore Extension</h5>
+
+<p><em>coming soon</em></p>
+
+<h5>
+<a name="basic-in-memory-cache-extension" class="anchor" href="#basic-in-memory-cache-extension"><span class="octicon octicon-link"></span></a>Basic In Memory Cache Extension</h5>
+
+<p><em>coming soon</em></p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/johannds">johannds</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
