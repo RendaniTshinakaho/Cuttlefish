@@ -32,7 +32,8 @@ namespace Cuttlefish.ExampleApp.UI.Web
                 .UseInMemoryEventStore()
                 .UseMassTransitAggregateUpdatePublisher(ServiceBusFactory.New(sbc =>
                 {
-                    sbc.ReceiveFrom("rabbitmq://localhost/aggregates");
+                    sbc.UseRabbitMq();
+                    sbc.ReceiveFrom("rabbitmq://127.0.0.1/aggregates");
                 }))
                 .Done();
         }
