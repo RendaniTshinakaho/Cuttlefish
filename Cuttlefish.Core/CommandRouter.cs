@@ -60,6 +60,11 @@ namespace Cuttlefish
             }
         }
 
+        public static Dictionary<string, MethodInfo> GetCommandList()
+        {
+            return Router._commandDictionary;
+        }
+
         public static void ExecuteCommand(ICommand command)
         {
             Router.ExecuteCommandInternal(command);

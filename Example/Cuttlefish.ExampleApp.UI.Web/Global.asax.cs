@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
@@ -28,12 +29,12 @@ namespace Cuttlefish.ExampleApp.UI.Web
 
             Core.Reset();
             Core.Instance
-                .WithDomainNamespaceRoot("Cuttlefish.ExampleApp.Domain")
+                .WithDomainNamespaceRoot(ConfigurationManager.AppSettings["DomainNamespace"])
                 .UseInMemoryEventStore()
                 .UseMassTransitAggregateUpdatePublisher(ServiceBusFactory.New(sbc =>
                 {
                     sbc.UseRabbitMq();
-                    sbc.ReceiveFrom("rabbitmq://127.0.0.1/aggregates");
+                    sbc.ReceiveFrom(ConfigurationManager.AppSettings["AggregateUpdateQueueURL"]);
                 }))
                 .Done();
         }

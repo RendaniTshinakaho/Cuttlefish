@@ -1,0 +1,66 @@
+﻿@using System.Reflection
+@model System.Reflection.MethodInfo
+
+@{
+    ViewBag.Title = "title";
+}
+<div class="container">
+    <div class="row">
+        <h2>Execute @Model.GetParameters().FirstOrDefault().ParameterType.Name</h2>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <form class="form-horizontal" id="frmMain">
+                @{
+                    foreach (var parameter in Model.GetParameters().First().ParameterType.GetConstructors()[0].GetParameters())
+                    {
+                        <div class="control-group">
+                            <label class="control-label" for="textinput">@parameter.Name</label>
+                            <div class="controls">
+                                <input id="@parameter.Name" name="textinput" type="text" class="input-xlarge">
+                            </div>
+                        </div>
+                    }
+                }
+
+                <div class="control-group">
+                    <div class="controls">
+                        <button id="btnExecute" name="btnExecute" class="btn btn-success">Execute Command</button>
+                        <button id="btnBack" name="btnBack" class="btn btn-danger">Back to Command List</button>
+                    </div>
+                </div>
+            </form>
+             <div class="alert alert-success" id="alert-success">
+                Your request has been sent for processing.
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-1.9.1.min.js"></script>
+<script>
+
+    $(document).ready(function() {
+
+        $("#alert-success").hide();
+
+        $("#btnExecute").click(function (evt) {
+
+            evt.preventDefault();
+
+            var values = $("#frmMain").serialize();
+
+            $.post("Command/Exec", values);
+            $("#alert-success").fadeIn(2000, function () {
+                $("#alert-success").fadeOut(1500);
+            });
+        });
+
+        $("#btnBack").click(function (e) {
+            e.preventDefault();
+            history.go(-1);
+        });
+    });
+
+</script>

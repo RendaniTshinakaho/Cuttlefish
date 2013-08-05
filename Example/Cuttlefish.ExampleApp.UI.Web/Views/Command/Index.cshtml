@@ -1,0 +1,28 @@
+﻿@model Dictionary<string, System.Reflection.MethodInfo>
+@{
+    ViewBag.Title = "Aggregate Commands";
+}
+<div class="container">
+    <div class="row">
+        <h2>Aggregate Commands</h2>
+    </div>
+    <div class="row">
+        <div class="span12">
+            @{
+                var currentCommandHandler = string.Empty;
+                foreach (var command in Model.OrderBy(i => i.Value.DeclaringType.Name))
+                {
+                    if (@command.Value.DeclaringType.Name != currentCommandHandler)
+                    {
+                        currentCommandHandler = @command.Value.DeclaringType.Name;
+                <h4>@currentCommandHandler</h4>
+                    }
+        
+                <div>
+                    <a href="Exec?commandName=@command.Key">@command.Key</a>
+                </div>
+                }
+            }
+        </div>
+    </div>
+</div>
