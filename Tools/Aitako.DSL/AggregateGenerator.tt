@@ -48,6 +48,7 @@ public class <#= @event.Name #> : IEvent
 {
 	private readonly int _version;
     public int Version { get { return _version; } }
+    public DateTime Timestamp { get; private set; }
 
 	<# foreach(Parameter parameter in @event.Parameters){ #>
 	public <#= ResolveType(parameter.Type) #> <#= parameter.Name #> { get; private set; }
@@ -56,6 +57,7 @@ public class <#= @event.Name #> : IEvent
     private <#= @event.Name #>()
 	{
 		_version = 1;
+        Timestamp = DateTime.Now;
 	}
    
     public <#= @event.Name #>(<#= ParameterList(@event.Parameters)#>) : this()

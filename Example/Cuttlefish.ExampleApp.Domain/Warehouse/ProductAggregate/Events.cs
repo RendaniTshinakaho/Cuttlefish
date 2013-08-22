@@ -10,6 +10,7 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
         private NewProductAddedToWarehouse()
         {
             _version = 1;
+            Timestamp = DateTime.Now;
         }
 
         public NewProductAddedToWarehouse(Guid aggregateidentity, String itemcode, String name, String description,
@@ -20,10 +21,8 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
             Name = name;
             Description = description;
             Barcode = barcode;
-            Timestamp = DateTime.Now;
         }
 
-        public DateTime Timestamp { get; private set; }
         public String ItemCode { get; private set; }
         public String Name { get; private set; }
         public String Description { get; private set; }
@@ -34,6 +33,7 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
             get { return _version; }
         }
 
+        public DateTime Timestamp { get; private set; }
         public Guid AggregateIdentity { get; private set; }
     }
 
@@ -44,6 +44,7 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
         private Renamed()
         {
             _version = 1;
+            Timestamp = DateTime.Now;
         }
 
         public Renamed(Guid aggregateidentity, String name) : this()
@@ -59,6 +60,7 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
             get { return _version; }
         }
 
+        public DateTime Timestamp { get; private set; }
         public Guid AggregateIdentity { get; private set; }
     }
 
@@ -69,6 +71,7 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
         private Discontinued()
         {
             _version = 1;
+            Timestamp = DateTime.Now;
         }
 
         public Discontinued(Guid aggregateidentity) : this()
@@ -81,6 +84,7 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
             get { return _version; }
         }
 
+        public DateTime Timestamp { get; private set; }
         public Guid AggregateIdentity { get; private set; }
     }
 
@@ -91,6 +95,7 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
         private Suspended()
         {
             _version = 1;
+            Timestamp = DateTime.Now;
         }
 
         public Suspended(Guid aggregateidentity) : this()
@@ -103,6 +108,7 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
             get { return _version; }
         }
 
+        public DateTime Timestamp { get; private set; }
         public Guid AggregateIdentity { get; private set; }
     }
 
@@ -113,6 +119,7 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
         private StockReceived()
         {
             _version = 1;
+            Timestamp = DateTime.Now;
         }
 
         public StockReceived(Guid aggregateidentity, Int32 quantity) : this()
@@ -128,6 +135,7 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
             get { return _version; }
         }
 
+        public DateTime Timestamp { get; private set; }
         public Guid AggregateIdentity { get; private set; }
     }
 
@@ -138,6 +146,7 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
         private StockBookedOut()
         {
             _version = 1;
+            Timestamp = DateTime.Now;
         }
 
         public StockBookedOut(Guid aggregateidentity, Int32 quantity) : this()
@@ -153,6 +162,7 @@ namespace Cuttlefish.ExampleApp.Domain.Warehouse
             get { return _version; }
         }
 
+        public DateTime Timestamp { get; private set; }
         public Guid AggregateIdentity { get; private set; }
     }
 }

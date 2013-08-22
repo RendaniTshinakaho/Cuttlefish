@@ -138,6 +138,7 @@ namespace Cuttlefish.Tests.Core
 
         public Guid AggregateIdentity { get; private set; }
         public int Version { get; private set; }
+        public DateTime Timestamp { get; private set; }
     }
 
     public class OneSubtracted : IEvent
@@ -149,5 +150,6 @@ namespace Cuttlefish.Tests.Core
 
         public Guid AggregateIdentity { get; private set; }
         public int Version { get; private set; }
+        public DateTime Timestamp { get; private set; }
     }
 }
