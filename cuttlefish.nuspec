@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>cuttlefish</id>
+        <version>1.0.0</version>
+        <title>Cuttlefish</title>
+        <authors>Johann de Swardt</authors>
+        <owners>Johann de Swardt</owners>
+        <licenseUrl>http://creativecommons.org/licenses/by-nc-sa/3.0/deed.en_GB</licenseUrl>
+        <projectUrl>http://johannds.github.io/Cuttlefish/</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>The framework uses MassTransit as a message bus wrapper, which means that you could use either RabbitMQ or MSMQ as an event queue. Events are persisted through the excellent NEventStore library which has support for a wide range of databases including MongoDB, RavenDB and various flavours of SQL.
+
+A basic and functional example of a domain built with the framework is included under the Cuttlefish.ExampleApp.Domain folder. It illustrates the use of commands, aggregates, services and events in the context of the Cuttlefish framework.</description>
+        <summary>A friendly and easy to use framework based on CQRS principles with a fluid configuration interface which wires up some commonly used components common in a CQRS implementation using event sourcing.</summary>
+        <copyright>Johann de Swardt</copyright>
+        <tags>cqrs eventsourcing</tags>
+        <dependencies>
+            <group targetFramework=".NETFramework4.5">
+                <dependency id="MassTransit.RabbitMQ" version="2.8.0" />
+                <dependency id="mongocsharpdriver" version="1.8.2" />
+                <dependency id="MassTransit.StructureMap" version="2.8.0" />
+                <dependency id="structuremap" version="2.6.4.1" />
+                <dependency id="EventStore.Persistence.MongoPersistence" version="3.2.0.28" />
+                <dependency id="EventStore" version="3.2.0.28" />
+            </group>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="Extensions\Cuttlefish.AggregatePublishers.MassTransit\bin\Debug\Cuttlefish.AggregatePublishers.MassTransit.dll" target="lib\Cuttlefish.AggregatePublishers.MassTransit.dll" />
+        <file src="Extensions\Cuttlefish.Caches.BasicInMemory\bin\Debug\Cuttlefish.Caches.BasicInMemory.dll" target="lib\Cuttlefish.Caches.BasicInMemory.dll" />
+        <file src="Cuttlefish.Core\bin\Debug\Cuttlefish.Common.dll" target="lib\Cuttlefish.Common.dll" />
+        <file src="Cuttlefish.Core\bin\Debug\Cuttlefish.Core.dll" target="lib\Cuttlefish.Core.dll" />
+        <file src="Extensions\Cuttlefish.EventStorage.NEventStore\bin\Debug\Cuttlefish.EventStorage.NEventStore.dll" target="lib\Cuttlefish.EventStorage.NEventStore.dll" />
+        <file src="Extensions\Cuttlefish.Storage.MongoDB\bin\Debug\Cuttlefish.Storage.MongoDB.dll" target="lib\Cuttlefish.Storage.MongoDB.dll" />
+    </files>
+</package>
